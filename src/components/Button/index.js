@@ -7,21 +7,23 @@ const ButtonStyled = styled(Button)`
   width: 100%;
 `;
 
-const ButtonMUI = ({ name, text, type }, props) => (
+const ButtonMUI = ({ children, variant, type, disabled = false, props }) => (
   <ButtonStyled
-    variant={text ?? "contained"}
+    variant={variant ?? "contained"}
     color="primary"
     type={type}
+    disabled={disabled}
     {...props}
   >
-    {name}
+    {children}
   </ButtonStyled>
 );
 
 ButtonMUI.propTypes = {
-  name: PropTypes.string.isRequired,
-  text: PropTypes.string,
+  children: PropTypes.node.isRequired,
+  variant: PropTypes.string,
   type: PropTypes.string,
+  disabled: PropTypes.bool,
   props: PropTypes.shape(PropTypes.object),
 };
 

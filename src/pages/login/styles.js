@@ -1,22 +1,27 @@
 import styled from "styled-components";
+import media from "../../css/styledMedias";
 
 export const Box = styled.div`
-  align-items: center;
-
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-
   form {
     border: 1px solid #ccc !important;
     padding: 16px;
-    width: 50%;
   }
 
   .centralize {
     text-align: center;
   }
+
+  ${media.greaterThan("tablet")`
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      form {
+        width: 50%;
+      }
+  `}
 `;
 
 export const WrapperField = styled.div`
@@ -24,6 +29,8 @@ export const WrapperField = styled.div`
 `;
 
 export const WrapperButton = styled.div`
-  margin: 0 auto;
-  width: 50%;
+  ${media.greaterThan("tablet")`
+      margin: 0 auto;
+      width: 50%;
+  `}
 `;

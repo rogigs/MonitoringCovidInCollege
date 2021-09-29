@@ -25,7 +25,7 @@ const Login = () => {
 
   return (
     <S.Box>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form className="container" onSubmit={handleSubmit(onSubmit)}>
         <h1 className="centralize">COVID Monitoring</h1>
         <S.WrapperField>
           <Controller
@@ -38,7 +38,9 @@ const Login = () => {
           <Controller
             name="password"
             control={control}
-            render={({ field }) => <TextFieldMUI label="Senha" {...field} />}
+            render={({ field }) => (
+              <TextFieldMUI type="password" label="Senha" {...field} />
+            )}
           />
         </S.WrapperField>
         <Controller
@@ -52,14 +54,6 @@ const Login = () => {
         <S.WrapperButton>
           <ButtonMUI type="submit" disabled={isDisabled}>
             Entrar
-          </ButtonMUI>
-          <ButtonMUI
-            className="centralize"
-            size="small"
-            disableElevation
-            variant="text"
-          >
-            Cadastrar-se
           </ButtonMUI>
         </S.WrapperButton>
       </form>

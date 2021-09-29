@@ -2,8 +2,8 @@ import styled from "styled-components";
 import media from "../../css/styledMedias";
 
 export const Box = styled.div`
-  form {
-    border: 1px solid #ccc !important;
+  .container {
+    border: 1px solid #ccc;
     padding: 16px;
   }
 
@@ -18,7 +18,7 @@ export const Box = styled.div`
       flex-wrap: wrap;
       justify-content: center;
 
-      form {
+      .container {
         width: 50%;
       }
   `}

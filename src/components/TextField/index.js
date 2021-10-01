@@ -7,7 +7,15 @@ const TextFielStyled = styled(TextField)`
   width: 100%;
 `;
 
-const TextFieldMUI = (props) => <TextFielStyled variant="filled" {...props} />;
+const TextFieldMUI = (props) => (
+  <TextFielStyled
+    variant="filled"
+    InputLabelProps={{
+      shrink: true,
+    }}
+    {...props}
+  />
+);
 
 TextFieldMUI.propTypes = {
   props: PropTypes.shape(PropTypes.object),

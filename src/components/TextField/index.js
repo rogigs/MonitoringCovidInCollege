@@ -10,10 +10,10 @@ const TextFielStyled = styled(TextField)`
 const TextFieldMUI = (props) => (
   <TextFielStyled
     variant="filled"
-    {...props}
     InputLabelProps={{
       shrink: true,
     }}
+    {...props}
   />
 );
 

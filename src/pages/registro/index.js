@@ -4,17 +4,15 @@ import { format } from "date-fns";
 import TextFieldMUI from "../../components/TextField";
 
 import ButtonMUI from "../../components/Button";
-import CheckboxMUI from "../../components/Checkbox";
 import * as S from "./styles";
+import RadioMUI from "../../components/Radio";
+import RADIOS from "./utils";
 
 function Register() {
   const { handleSubmit, control, watch, reset } = useForm({
     mode: "onSubmit",
     defaultValues: {
-      typeUser: {
-        student: false,
-        employee: false,
-      },
+      typeUser: "student",
       registrationNumber: "",
       fullName: "",
       bornDate: "",
@@ -24,14 +22,8 @@ function Register() {
   });
 
   const watched = watch();
-  const allCheckboxChecked =
-    watched.typeUser.student && watched.typeUser.employee;
-  const hasOneCheckboxChecked =
-    !watched.typeUser.student && !watched.typeUser.employee;
-  const isDisabled =
-    Object.values(watched).some((value) => value === "") ||
-    allCheckboxChecked ||
-    hasOneCheckboxChecked;
+  console.log(watched);
+  const isDisabled = Object.values(watched).some((value) => value === "");
 
   const resetForm = () => reset();
   // TODO: aleatory password
@@ -46,16 +38,10 @@ function Register() {
         <h1 className="centralize">Registro de usuarios</h1>
         <S.WrapperField>
           <Controller
-            name="typeUser.student"
-            control={control}
-            render={({ field }) => <CheckboxMUI label="Aluno" {...field} />}
-          />
-
-          <Controller
-            name="typeUser.employee"
+            name="typeUser"
             control={control}
             render={({ field }) => (
-              <CheckboxMUI label="Colaborador" {...field} />
+              <RadioMUI row radios={RADIOS} field={field} />
             )}
           />
         </S.WrapperField>
@@ -66,9 +52,17 @@ function Register() {
             render={({ field }) => (
               <TextFieldMUI
                 label="Numero de matricula(ou funcional): *"
-                type="number"
                 {...field}
               />
+            )}
+          />
+        </S.WrapperField>
+        <S.WrapperField>
+          <Controller
+            name="fullName"
+            control={control}
+            render={({ field }) => (
+              <TextFieldMUI label="Nome completo" {...field} />
             )}
           />
         </S.WrapperField>

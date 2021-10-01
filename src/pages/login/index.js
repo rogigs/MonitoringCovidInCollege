@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
+import { useRouter } from "next/router";
 import TextFieldMUI from "../../components/TextField";
-
 import ButtonMUI from "../../components/Button";
 import CheckboxMUI from "../../components/Checkbox";
 
@@ -18,10 +18,13 @@ const Login = () => {
   });
 
   const { user, password } = watch();
-
   const isDisabled = user === "" || password === "";
 
-  const onSubmit = (data) => console.log(data);
+  const router = useRouter();
+  const onSubmit = (data) => {
+    console.log(data);
+    return router.push("/dashboard");
+  };
 
   return (
     <S.Box>
@@ -47,10 +50,9 @@ const Login = () => {
           name="keepMeConnected"
           control={control}
           render={({ field }) => (
-            <CheckboxMUI label="Manter-me conectado" field={field} {...field} />
+            <CheckboxMUI label="Manter-me conectado" {...field} />
           )}
         />
-
         <S.WrapperButton>
           <ButtonMUI type="submit" disabled={isDisabled}>
             Entrar

@@ -1,23 +1,20 @@
 import styled from "styled-components";
-import media from "../../css/styledMedias";
+import media from "../../../css/styledMedias";
+import DESIGN_SYSTEM from "../../../css/designSystem";
 
 export const Box = styled.div`
-  .container {
-    border: 1px solid #ccc;
-    padding: 16px;
-  }
-
-  .centralize {
+  .title {
     text-align: center;
+    margin-bottom: ${DESIGN_SYSTEM.spaces.spaceSm};
   }
 
   ${media.greaterThan("tablet")`
-      align-items: center;
       display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
+      flex-direction: column;
       justify-content: center;
-
+      align-items: center;
+      min-height: 100vh;
+  
       .container {
         width: 50%;
       }
@@ -25,10 +22,14 @@ export const Box = styled.div`
 `;
 
 export const WrapperField = styled.div`
-  margin-bottom: 16px;
+  margin-bottom: ${DESIGN_SYSTEM.spaces.spaceSm};
 `;
 
 export const WrapperButton = styled.div`
+  .reset {
+    margin-top: ${DESIGN_SYSTEM.spaces.spaceSm};
+  }
+
   ${media.greaterThan("tablet")`
       margin: 0 auto;
       width: 50%;

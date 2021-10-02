@@ -5,7 +5,7 @@ const RADIOS_QUEST_ITS_OK = [
   },
   {
     value: "-",
-    label: "Nao muito bem",
+    label: "Não muito bem",
   },
 ];
 
@@ -16,7 +16,7 @@ const RADIOS_QUEST_ABOUT_HEALTH = [
   },
   {
     value: "-",
-    label: "Nao",
+    label: "Não",
   },
 ];
 

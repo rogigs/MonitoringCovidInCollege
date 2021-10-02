@@ -7,16 +7,22 @@ const ButtonStyled = styled(Button)`
   width: 100%;
 `;
 
-const ButtonMUI = (
-  { children, variant, type, disabled = false, onClick },
-  props
-) => (
+const ButtonMUI = ({
+  children,
+  variant,
+  type,
+  disabled = false,
+  onClick,
+  className,
+  props,
+}) => (
   <ButtonStyled
     variant={variant ?? "contained"}
     color="primary"
     type={type}
     disabled={disabled}
     onClick={onClick}
+    className={className}
     {...props}
   >
     {children}
@@ -29,6 +35,7 @@ ButtonMUI.propTypes = {
   variant: PropTypes.string,
   type: PropTypes.string,
   disabled: PropTypes.bool,
+  className: PropTypes.shape(PropTypes.object, PropTypes.string),
   props: PropTypes.shape(PropTypes.object),
 };
 

@@ -1,10 +1,20 @@
-body {
-  background-color: #fff;
-  font-family: "Playfair Display", serif;
+* {
+  box-sizing: border-box;
   margin: 0;
-  max-width: 1440px;
+  padding: 0;
 }
 
-code {
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizelegibility;
+  text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--white);
+  font-size: 16px;
+  max-width: 1440px;
+  margin: 0 auto;
   font-family: "Playfair Display", serif;
 }

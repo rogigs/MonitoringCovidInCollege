@@ -9,6 +9,7 @@ const RadioMUI = ({ radios, row = false, field }) => (
   <RadioGroup row={row} {...field}>
     {radios.map((radioOption) => (
       <FormControlLabel
+        key={`radio-${radioOption.label}`}
         value={radioOption.value}
         control={<Radio />}
         label={radioOption.label}
@@ -20,7 +21,7 @@ const RadioMUI = ({ radios, row = false, field }) => (
 RadioMUI.propTypes = {
   radios: PropTypes.arrayOf([
     {
-      value: PropTypes.string.isRequired,
+      value: PropTypes.any.isRequired,
       label: PropTypes.string.isRequired,
     },
   ]).isRequired,

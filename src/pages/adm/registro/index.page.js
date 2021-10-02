@@ -7,6 +7,8 @@ import ButtonMUI from "../../../components/Button";
 import * as S from "./styles";
 import RadioMUI from "../../../components/Radio";
 import RADIOS from "./utils";
+import { backendUrl } from "../../../config";
+import axios from "axios";
 
 function Register() {
   const { handleSubmit, control, watch, reset } = useForm({
@@ -27,8 +29,23 @@ function Register() {
   const resetForm = () => reset();
   // TODO: aleatory password
   const onSubmit = (data) => {
-    console.log(data);
-    resetForm();
+    return axios
+      .post(`${backendUrl}/register`, {
+        admin_key: "admin_key",
+        code: data.registrationNumber,
+        password: data.registrationNumber,
+        full_name: data.fullName,
+        birth_date: data.bornDate,
+        city: data.city,
+        uf: data.uf,
+      })
+      .then((res) => {
+        console.log(res);
+        resetForm();
+      })
+      .catch((e) => {
+        console.log(e.response.data);
+      });
   };
 
   return (

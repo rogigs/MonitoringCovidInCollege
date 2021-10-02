@@ -6,6 +6,8 @@ import ButtonMUI from "../../components/Button";
 import CheckboxMUI from "../../components/Checkbox";
 
 import * as S from "./styles";
+import axios from "axios";
+import { backendUrl } from "../../config";
 
 const Login = () => {
   const { handleSubmit, control, watch } = useForm({
@@ -23,7 +25,14 @@ const Login = () => {
   const router = useRouter();
   const onSubmit = (data) => {
     console.log(data);
-    return router.push("/adm/dashboard");
+    return axios
+      .post(`${backendUrl}/auth`, { code: data.user, password: data.password })
+      .then((res) => {
+        return router.push("/adm/dashboard");
+      })
+      .catch((e) => {
+        console.log(e.response.data);
+      });
   };
 
   return (

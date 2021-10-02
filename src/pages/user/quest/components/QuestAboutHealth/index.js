@@ -2,7 +2,7 @@ import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import PropTypes from "prop-types";
 import ButtonMUI from "../../../../../components/Button";
-import * as S from "./styles";
+import * as S from "../../styles";
 import RadioMUI from "../../../../../components/Radio";
 
 import RADIOS from "../../utils";
@@ -45,22 +45,22 @@ function QuestAboutHealth() {
 
   return (
     <S.Box>
-      <form className="container" onSubmit={handleSubmit(onSubmit)}>
-        <h1 className="centralize">Marque os sintomas que voce esta sentido</h1>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <h1 className="title">Marque os sintomas que voce esta sentido</h1>
         <S.BoxRadios>
           <RowOfFormWithRadios text="Falta de ar" name="shortnessOfBreathe" />
-          <RowOfFormWithRadios text="Cansaco" name="tiredness" />
+          <RowOfFormWithRadios text="Cansaço" name="tiredness" />
           <RowOfFormWithRadios text="Febre" name="ferver" />
           <RowOfFormWithRadios text="Calafrio" name="chill" />
           <RowOfFormWithRadios text="Tosse" name="cough" />
           <RowOfFormWithRadios text="Dor de garganta" name="soreThroat" />
-          <RowOfFormWithRadios text="Dor de cabeca" name="headache" />
+          <RowOfFormWithRadios text="Dor de cabeça" name="headache" />
           <RowOfFormWithRadios text="Dor no peito" name="headache" />
           <RowOfFormWithRadios text="Dores musculares" name="chestPain" />
           <RowOfFormWithRadios text="Perda de olfato" name="lossOfSmell" />
           <RowOfFormWithRadios text="Perda de paladar" name="lossOfTaste" />
-          <RowOfFormWithRadios text="Diarreia" name="diarrhea" />
-          <RowOfFormWithRadios text="Espirros" name="sneezes" />{" "}
+          <RowOfFormWithRadios text="Diarréia" name="diarrhea" />
+          <RowOfFormWithRadios text="Espirros" name="sneezes" />
         </S.BoxRadios>
         <S.WrapperButton>
           <ButtonMUI type="submit">Registrar</ButtonMUI>

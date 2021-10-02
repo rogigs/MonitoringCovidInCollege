@@ -1,28 +1,25 @@
 import styled from "styled-components";
-import media from "../../../../../css/styledMedias";
+import DESIGN_SYSTEM from "../../../css/designSystem";
+import media from "../../../css/styledMedias";
 
 export const Box = styled.div`
   .container {
     border: 1px solid #ccc;
-    padding: 16px;
+    padding: ${DESIGN_SYSTEM.spaces.spaceSm};
   }
 
-  .centralize {
+  .title {
     text-align: center;
-    margin-bottom: 16px;
-  }
-
-  .quest {
-    width: 100%;
+    margin-bottom: ${DESIGN_SYSTEM.spaces.spaceSm};
   }
 
   ${media.greaterThan("tablet")`
-      align-items: center;
       display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
+      flex-direction: column;
       justify-content: center;
-
+      align-items: center;
+      min-height: 100vh;
+  
       .container {
         width: 50%;
       }
@@ -30,18 +27,17 @@ export const Box = styled.div`
 `;
 
 export const BoxRadios = styled.div`
-  align-items: center;
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
 `;
 
 export const WrapperField = styled.div`
   display: flex;
   justify-content: space-between;
   width: fit-content;
-  margin-bottom: 8px;
+  margin-bottom: ${DESIGN_SYSTEM.spaces.spaceXs};
 
   .label {
     min-width: 150px;
@@ -52,8 +48,6 @@ export const WrapperField = styled.div`
 `;
 
 export const WrapperButton = styled.div`
-  padding-top: 16px;
-
   ${media.greaterThan("tablet")`
       margin: 0 auto;
       width: 50%;

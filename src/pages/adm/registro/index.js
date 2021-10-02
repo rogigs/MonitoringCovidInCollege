@@ -1,11 +1,11 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { format } from "date-fns";
-import TextFieldMUI from "../../components/TextField";
+import TextFieldMUI from "../../../components/TextField";
 
-import ButtonMUI from "../../components/Button";
+import ButtonMUI from "../../../components/Button";
 import * as S from "./styles";
-import RadioMUI from "../../components/Radio";
+import RadioMUI from "../../../components/Radio";
 import RADIOS from "./utils";
 
 function Register() {
@@ -22,7 +22,6 @@ function Register() {
   });
 
   const watched = watch();
-  console.log(watched);
   const isDisabled = Object.values(watched).some((value) => value === "");
 
   const resetForm = () => reset();
@@ -35,7 +34,7 @@ function Register() {
   return (
     <S.Box>
       <form className="container" onSubmit={handleSubmit(onSubmit)}>
-        <h1 className="centralize">Registro de usuarios</h1>
+        <h1 className="title">Registro de usuários</h1>
         <S.WrapperField>
           <Controller
             name="typeUser"
@@ -51,7 +50,7 @@ function Register() {
             control={control}
             render={({ field }) => (
               <TextFieldMUI
-                label="Numero de matricula(ou funcional): *"
+                label="Número de matrícula(ou funcional):"
                 {...field}
               />
             )}
@@ -62,17 +61,16 @@ function Register() {
             name="fullName"
             control={control}
             render={({ field }) => (
-              <TextFieldMUI label="Nome completo" {...field} />
+              <TextFieldMUI label="Nome completo:" {...field} />
             )}
           />
         </S.WrapperField>
+        {/* TODO: Will should a select with option of according typeUser  */}
         <S.WrapperField>
           <Controller
-            name="fullName"
+            name=""
             control={control}
-            render={({ field }) => (
-              <TextFieldMUI label="Nome completo" {...field} />
-            )}
+            render={({ field }) => <TextFieldMUI label="Área:" {...field} />}
           />
         </S.WrapperField>
         <S.WrapperField>
@@ -82,7 +80,7 @@ function Register() {
             render={({ field }) => (
               <TextFieldMUI
                 type="date"
-                label="Data de nascimento"
+                label="Data de nascimento:"
                 InputProps={{
                   inputProps: {
                     min: "1900-01-01",
@@ -99,7 +97,7 @@ function Register() {
           <Controller
             name="city"
             control={control}
-            render={({ field }) => <TextFieldMUI label="Cidade" {...field} />}
+            render={({ field }) => <TextFieldMUI label="Cidade:" {...field} />}
           />
         </S.WrapperField>
         <S.WrapperField>
@@ -119,7 +117,9 @@ function Register() {
           <ButtonMUI type="submit" disabled={isDisabled}>
             Cadastrar
           </ButtonMUI>
-          <ButtonMUI onClick={resetForm}>Limpar</ButtonMUI>
+          <ButtonMUI className="reset" onClick={resetForm}>
+            Limpar
+          </ButtonMUI>
         </S.WrapperButton>
       </form>
     </S.Box>

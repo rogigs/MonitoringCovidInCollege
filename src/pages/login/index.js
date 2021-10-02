@@ -23,18 +23,23 @@ const Login = () => {
   const router = useRouter();
   const onSubmit = (data) => {
     console.log(data);
-    return router.push("/dashboard");
+    return router.push("/adm/dashboard");
   };
 
   return (
     <S.Box>
       <form className="container" onSubmit={handleSubmit(onSubmit)}>
-        <h1 className="centralize">COVID Monitoring</h1>
+        <h1 className="title">COVID Monitoring</h1>
         <S.WrapperField>
           <Controller
             name="user"
             control={control}
-            render={({ field }) => <TextFieldMUI label="Usuario" {...field} />}
+            render={({ field }) => (
+              <TextFieldMUI
+                label="Número de matrícula(ou funcional):"
+                {...field}
+              />
+            )}
           />
         </S.WrapperField>
         <S.WrapperField>
@@ -42,7 +47,7 @@ const Login = () => {
             name="password"
             control={control}
             render={({ field }) => (
-              <TextFieldMUI type="password" label="Senha" {...field} />
+              <TextFieldMUI type="password" label="Senha:" {...field} />
             )}
           />
         </S.WrapperField>

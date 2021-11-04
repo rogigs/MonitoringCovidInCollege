@@ -1,39 +1,30 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
+import { yupResolver } from "@hookform/resolvers/yup";
 import TextFieldMUI from "../../components/TextField";
 import ButtonMUI from "../../components/Button";
 import CheckboxMUI from "../../components/Checkbox";
-
+import { authLogin } from "../../services/backend";
 import * as S from "./styles";
-import axios from "axios";
-import { backendUrl } from "../../config";
+import validationSchema from "./utils/validationSchema";
 
 const Login = () => {
-  const { handleSubmit, control, watch } = useForm({
+  const {
+    handleSubmit,
+    control,
+    formState: { errors, isSubmitting },
+  } = useForm({
     mode: "onSubmit",
     defaultValues: {
       user: "",
       password: "",
       keepMeConnected: false,
     },
+    resolver: yupResolver(validationSchema),
   });
 
-  const { user, password } = watch();
-  const isDisabled = user === "" || password === "";
-
-  const router = useRouter();
-  const onSubmit = (data) => {
-    console.log(data);
-    return axios
-      .post(`${backendUrl}/auth`, { code: data.user, password: data.password })
-      .then((res) => {
-        return router.push("/adm/dashboard");
-      })
-      .catch((e) => {
-        console.log(e.response.data);
-      });
-  };
+  const onSubmit = (data) => {};
 
   return (
     <S.Box>
@@ -46,6 +37,8 @@ const Login = () => {
             render={({ field }) => (
               <TextFieldMUI
                 label="Número de matrícula(ou funcional):"
+                error={errors?.user}
+                helperText={errors?.user?.message}
                 {...field}
               />
             )}
@@ -56,7 +49,13 @@ const Login = () => {
             name="password"
             control={control}
             render={({ field }) => (
-              <TextFieldMUI type="password" label="Senha:" {...field} />
+              <TextFieldMUI
+                type="password"
+                label="Senha:"
+                error={errors?.password}
+                helperText={errors?.password?.message}
+                {...field}
+              />
             )}
           />
         </S.WrapperField>
@@ -68,7 +67,7 @@ const Login = () => {
           )}
         />
         <S.WrapperButton>
-          <ButtonMUI type="submit" disabled={isDisabled}>
+          <ButtonMUI type="submit" disabled={isSubmitting}>
             Entrar
           </ButtonMUI>
         </S.WrapperButton>

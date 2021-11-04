@@ -1,14 +1,14 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { format } from "date-fns";
-import TextFieldMUI from "../../../components/TextField";
-
-import ButtonMUI from "../../../components/Button";
-import * as S from "./styles";
-import RadioMUI from "../../../components/Radio";
-import RADIOS from "./utils";
-import { backendUrl } from "../../../config";
 import axios from "axios";
+import TextFieldMUI from "~/components/TextField";
+
+import ButtonMUI from "~/components/Button";
+import * as S from "./styles";
+import RadioMUI from "~/components/Radio";
+import RADIOS from "./utils";
+import { backendUrl } from "~/config";
 
 function Register() {
   const { handleSubmit, control, watch, reset } = useForm({
@@ -28,8 +28,8 @@ function Register() {
 
   const resetForm = () => reset();
   // TODO: aleatory password
-  const onSubmit = (data) => {
-    return axios
+  const onSubmit = (data) =>
+    axios
       .post(`${backendUrl}/register`, {
         admin_key: "admin_key",
         code: data.registrationNumber,
@@ -46,7 +46,6 @@ function Register() {
       .catch((e) => {
         console.log(e.response.data);
       });
-  };
 
   return (
     <S.Box>

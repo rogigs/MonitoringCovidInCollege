@@ -1,7 +1,7 @@
 import React from "react";
 
 import { useRouter } from "next/router";
-import ButtonMUI from "../../../components/Button";
+import ButtonMUI from "~/components/Button";
 
 function Dashboard() {
   const router = useRouter();

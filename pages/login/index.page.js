@@ -2,10 +2,10 @@ import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
-import TextFieldMUI from "../../components/TextField";
-import ButtonMUI from "../../components/Button";
-import CheckboxMUI from "../../components/Checkbox";
-import { authLogin } from "../../services/backend";
+import TextFieldMUI from "~/components/TextField";
+import ButtonMUI from "~/components/Button";
+import CheckboxMUI from "~/components/Checkbox";
+import { authLogin } from "~/services/backend";
 import * as S from "./styles";
 import validationSchema from "./utils/validationSchema";
 

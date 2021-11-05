@@ -3,7 +3,7 @@ import { Checkbox, FormControlLabel } from "@material-ui/core";
 import PropTypes from "prop-types";
 import React from "react";
 
-const CheckboxMUI = ({ label, onChange, value, props }) => (
+const CheckboxMUI = ({ label, onChange, value, ...props }) => (
   <FormControlLabel
     control={<Checkbox />}
     onChange={(e) => onChange(e.target.checked)}

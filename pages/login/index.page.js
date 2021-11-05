@@ -36,8 +36,10 @@ const Login = () => {
 
   const handleCloseModal = () => setModal({ ...modal, open: false });
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     try {
+      await authLogin(data);
+
       router.push("/adm/dashboard");
     } catch (error) {
       setModal({

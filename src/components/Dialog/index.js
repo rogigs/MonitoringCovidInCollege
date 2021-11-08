@@ -1,17 +1,25 @@
 import * as React from "react";
-import Button from "@material-ui/core/Button";
 import { styled } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
+import DESIGN_SYSTEM from "~/css/designSystem";
+import ButtonMUI from "../Button";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
-    padding: theme.spacing(2),
+    padding: DESIGN_SYSTEM.spaces.space,
   },
   "& .MuiDialogActions-root": {
-    padding: theme.spacing(1),
+    padding: DESIGN_SYSTEM.spaces.space,
+  },
+  "& .center": {
+    display: "flex",
+    justifyContent: "center",
+  },
+  "& .icon": {
+    paddingTop: DESIGN_SYSTEM.spaces.space,
   },
 }));
 
@@ -21,26 +29,26 @@ const DialogMUI = ({
   children,
   buttonName,
   title,
+  icon,
   ...props
-}) => {
-  return (
-    <div>
-      <BootstrapDialog
-        open={open}
-        onClose={onClose}
-        aria-labelledby="customized-dialog-title"
-        {...props}
-      >
-        <DialogTitle sx={{ m: 0, p: 2 }}>{title}</DialogTitle>
-        <DialogContent dividers>{children}</DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={onClose}>
-            {buttonName}
-          </Button>
-        </DialogActions>
-      </BootstrapDialog>
-    </div>
-  );
-};
+}) => (
+  <div>
+    <BootstrapDialog
+      open={open}
+      onClose={onClose}
+      aria-labelledby="customized-dialog-title"
+      {...props}
+    >
+      {icon && <div className="center icon">{icon}</div>}
+      <DialogTitle className="center">{title}</DialogTitle>
+      <DialogContent>{children}</DialogContent>
+      <DialogActions>
+        <ButtonMUI autoFocus type="submit" onClick={onClose}>
+          {buttonName}
+        </ButtonMUI>
+      </DialogActions>
+    </BootstrapDialog>
+  </div>
+);
 
 export default DialogMUI;

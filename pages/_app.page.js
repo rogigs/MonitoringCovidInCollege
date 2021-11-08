@@ -1,5 +1,5 @@
-import "../index.css";
 import React from "react";
+import "./index.css";
 
 // This default export is required in a new `pages/_app.js` file.
 // eslint-disable-next-line react/prop-types

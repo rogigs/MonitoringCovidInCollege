@@ -1,0 +1,20 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizelegibility;
+  text-size-adjust: 100%;
+}
+
+body {
+  background-color: #e5e5e5;
+  font-size: 16px;
+  max-width: 1440px;
+  margin: 0 auto;
+  font-family: "Playfair Display", serif;
+}

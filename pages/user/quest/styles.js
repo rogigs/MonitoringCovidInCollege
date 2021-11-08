@@ -5,6 +5,8 @@ import media from "~/css/styledMedias";
 export const Box = styled.div`
   .container {
     border: 1px solid #ccc;
+    border-radius: ${DESIGN_SYSTEM.spaces.spaceXxs};
+    box-shadow: 5px 5px 5px -1px rgba(0, 0, 0, 0.15);
     padding: ${DESIGN_SYSTEM.spaces.spaceSm};
   }
 
@@ -52,4 +54,23 @@ export const WrapperButton = styled.div`
       margin: 0 auto;
       width: 50%;
   `}
+`;
+
+export const WrapperRadios = styled.div`
+  border-radius: ${DESIGN_SYSTEM.spaces.spaceXxs};
+  border: 1px solid #ccc;
+  box-shadow: 5px 5px 5px -1px rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: ${DESIGN_SYSTEM.spaces.space};
+  padding: ${DESIGN_SYSTEM.spaces.spaceXs};
+  padding-left: ${DESIGN_SYSTEM.spaces.space};
+  width: 100%;
+
+  .label {
+    min-width: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 `;

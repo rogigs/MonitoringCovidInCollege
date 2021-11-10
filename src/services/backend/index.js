@@ -1,6 +1,5 @@
 import StringHelper from "~/helpers/StringHelper";
 import HttpConfig from "./HttpConfig";
-// TODO: Create config axios
 
 export const authLogin = async ({ user, password }) => {
   try {
@@ -44,6 +43,6 @@ export const registerUser = async ({
 
     return data;
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error(error.response.data.message);
   }
 };

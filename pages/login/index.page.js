@@ -3,8 +3,6 @@ import Cookies from "universal-cookie";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
-import ErrorOutlineSharp from "@material-ui/icons/ErrorOutlineSharp";
-import { ErrorSharp } from "@material-ui/icons";
 import TextFieldMUI from "~/components/TextField";
 import ButtonMUI from "~/components/Button";
 import CheckboxMUI from "~/components/Checkbox";
@@ -12,7 +10,6 @@ import { authLogin } from "~/services/backend";
 import * as S from "./styles";
 import validationSchema from "./utils/validationSchema";
 import DialogMUI from "~/components/Dialog";
-import useUser from "~/hooks/useUser";
 
 const Login = () => {
   const [modal, setModal] = useState({
@@ -82,7 +79,7 @@ const Login = () => {
           buttonName={modal?.buttonName}
           title={modal?.title}
           children={modal?.message}
-          icon={<ErrorOutlineSharp sx={{ color: "red" }} fontSize="large" />}
+          icon="danger"
         />
         <S.Box>
           <form className="container" onSubmit={handleSubmit(onSubmit)}>

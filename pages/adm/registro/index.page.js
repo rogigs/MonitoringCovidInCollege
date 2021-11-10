@@ -18,6 +18,7 @@ function Register() {
     title: "",
     message: "",
     buttonName: "",
+    icon: "",
   });
 
   const handleCloseModal = () => setModal({ ...modal, open: false });
@@ -50,16 +51,29 @@ function Register() {
 
       setModal({
         open: true,
-        title: "Usuario cadastrado com sucesso",
-        message: "",
+        title: "Usuario cadastrado",
+        message: "Parabéns, o usuário foi cadastrado com sucesso",
         buttonName: "Concluir",
+        icon: "success",
       });
     } catch (error) {
+      if (error.message === "User already exists") {
+        return setModal({
+          open: true,
+          title: "Erro ao registrar usuário",
+          message: "Você está tentando cadastrar um usúario que já existe",
+          buttonName: "Tentar novamente",
+          icon: "warning",
+        });
+      }
+
       setModal({
         open: true,
-        title: "Erro ao registrar usuario",
-        message: "Mensagem",
+        title: "Erro ao registrar usuário",
+        message:
+          "Não foi possível cadastrar o usuário, por favor tente novamente",
         buttonName: "Tentar novamente",
+        icon: "danger",
       });
     }
   };
@@ -72,7 +86,7 @@ function Register() {
         buttonName={modal?.buttonName}
         title={modal?.title}
         children={modal?.message}
-        icon={<> </>}
+        icon={modal?.icon}
       />
       <form className="container" onSubmit={handleSubmit(onSubmit)}>
         <h1 className="title">Registro de usuários</h1>

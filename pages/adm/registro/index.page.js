@@ -1,16 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { format } from "date-fns";
-import axios from "axios";
 import TextFieldMUI from "~/components/TextField";
+import { registerUser } from "~/services/backend";
 
+import DialogMUI from "~/components/Dialog";
 import ButtonMUI from "~/components/Button";
 import * as S from "./styles";
 import RadioMUI from "~/components/Radio";
 import RADIOS from "./utils";
-// import { backendUrl } from "~/config";
 
 function Register() {
+  const [modal, setModal] = useState({
+    open: false,
+    title: "",
+    message: "",
+    buttonName: "",
+  });
+
+  const handleCloseModal = () => setModal({ ...modal, open: false });
+
   const { handleSubmit, control, watch, reset } = useForm({
     mode: "onSubmit",
     defaultValues: {
@@ -28,27 +37,38 @@ function Register() {
 
   const resetForm = () => reset();
   // TODO: aleatory password
-  const onSubmit = (data) => console.log(data);
-  // axios
-  //   .post(`${backendUrl}/register`, {
-  //     admin_key: "admin_key",
-  //     code: data.registrationNumber,
-  //     password: data.registrationNumber,
-  //     full_name: data.fullName,
-  //     birth_date: data.bornDate,
-  //     city: data.city,
-  //     uf: data.uf,
-  //   })
-  //   .then((res) => {
-  //     console.log(res);
-  //     resetForm();
-  //   })
-  //   .catch((e) => {
-  //     console.log(e.response.data);
-  //   });
+  const onSubmit = async (data) => {
+    try {
+      await registerUser(data);
+
+      resetForm();
+
+      setModal({
+        open: true,
+        title: "Usuario cadastrado com sucesso",
+        message: "",
+        buttonName: "Concluir",
+      });
+    } catch (error) {
+      setModal({
+        open: true,
+        title: "Erro ao registrar usuario",
+        message: "Mensagem",
+        buttonName: "Tentar novamente",
+      });
+    }
+  };
 
   return (
     <S.Box>
+      <DialogMUI
+        open={modal?.open}
+        onClose={handleCloseModal}
+        buttonName={modal?.buttonName}
+        title={modal?.title}
+        children={modal?.message}
+        icon={<> </>}
+      />
       <form className="container" onSubmit={handleSubmit(onSubmit)}>
         <h1 className="title">Registro de usuários</h1>
         <S.WrapperField>
@@ -84,7 +104,7 @@ function Register() {
         {/* TODO: Will should a select with option of according typeUser  */}
         <S.WrapperField>
           <Controller
-            name=""
+            name="sector"
             control={control}
             render={({ field }) => <TextFieldMUI label="Área:" {...field} />}
           />

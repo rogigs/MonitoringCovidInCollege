@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import Cookies from "universal-cookie";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -37,14 +38,17 @@ const Login = () => {
 
   const handleCloseModal = () => setModal({ ...modal, open: false });
 
+  const cookies = new Cookies();
   const onSubmit = async (data) => {
-    const responseVisualToUser = (message) => {
-      if (typeof message === "object") {
-        return router.push("/adm/dashboard");
-      }
+    try {
+      const { token } = await authLogin(data);
 
-      if (message === "Error: Request failed with status code 401") {
-        return setModal({
+      cookies.set("token", token);
+
+      router.push("/adm/dashboard");
+    } catch (error) {
+      if (error.message === "Error: Request failed with status code 401") {
+        setModal({
           open: true,
           title: "Erro ao logar",
           message: "Número de matrícula/funcional ou senha incorretos",
@@ -52,15 +56,13 @@ const Login = () => {
         });
       }
 
-      return setModal({
+      setModal({
         open: true,
         title: "Erro ao logar",
         message: "Número de matrícula/funcional ou senha incorretos",
         buttonName: "Tentar novamente",
       });
-    };
-
-    await authLogin(data, responseVisualToUser);
+    }
   };
 
   return (

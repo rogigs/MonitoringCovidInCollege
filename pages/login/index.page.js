@@ -4,6 +4,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ErrorOutlineSharp from "@material-ui/icons/ErrorOutlineSharp";
+import { ErrorSharp } from "@material-ui/icons";
 import TextFieldMUI from "~/components/TextField";
 import ButtonMUI from "~/components/Button";
 import CheckboxMUI from "~/components/Checkbox";

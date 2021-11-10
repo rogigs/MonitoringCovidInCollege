@@ -33,12 +33,12 @@ export const registerUser = async ({
 
     const { data } = await HttpConfig.withToken.post(`auth/register`, {
       code: registrationNumber,
-      password: "123",
+      password: bornDate,
       full_name: fullName,
       birth_date: StringHelper.formatStringToTimestamp(bornDate).getTime(), // timestamp
       city,
       uf,
-      sector, // Opcional, para caso o usuário seja funcionário
+      sector,
       permission: permission[typeUser],
     });
 

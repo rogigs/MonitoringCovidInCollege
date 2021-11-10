@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { format } from "date-fns";
+import { yupResolver } from "@hookform/resolvers/yup";
+import validationSchema from "./utils/validationSchema";
 import TextFieldMUI from "~/components/TextField";
 import { registerUser } from "~/services/backend";
 
@@ -20,7 +22,12 @@ function Register() {
 
   const handleCloseModal = () => setModal({ ...modal, open: false });
 
-  const { handleSubmit, control, watch, reset } = useForm({
+  const {
+    handleSubmit,
+    control,
+    formState: { isSubmitting, errors },
+    reset,
+  } = useForm({
     mode: "onSubmit",
     defaultValues: {
       typeUser: "student",
@@ -30,13 +37,11 @@ function Register() {
       city: "",
       uf: "",
     },
+    resolver: yupResolver(validationSchema),
   });
 
-  const watched = watch();
-  const isDisabled = Object.values(watched).some((value) => value === "");
-
   const resetForm = () => reset();
-  // TODO: aleatory password
+
   const onSubmit = async (data) => {
     try {
       await registerUser(data);
@@ -87,6 +92,8 @@ function Register() {
             render={({ field }) => (
               <TextFieldMUI
                 label="Número de matrícula(ou funcional):"
+                error={errors?.registrationNumber}
+                helperText={errors?.registrationNumber?.message}
                 {...field}
               />
             )}
@@ -97,7 +104,12 @@ function Register() {
             name="fullName"
             control={control}
             render={({ field }) => (
-              <TextFieldMUI label="Nome completo:" {...field} />
+              <TextFieldMUI
+                label="Nome completo:"
+                error={errors?.fullName}
+                helperText={errors?.fullName?.message}
+                {...field}
+              />
             )}
           />
         </S.WrapperField>
@@ -106,7 +118,14 @@ function Register() {
           <Controller
             name="sector"
             control={control}
-            render={({ field }) => <TextFieldMUI label="Área:" {...field} />}
+            render={({ field }) => (
+              <TextFieldMUI
+                label="Área:"
+                error={errors?.sector}
+                helperText={errors?.sector?.message}
+                {...field}
+              />
+            )}
           />
         </S.WrapperField>
         <S.WrapperField>
@@ -117,6 +136,8 @@ function Register() {
               <TextFieldMUI
                 type="date"
                 label="Data de nascimento:"
+                error={errors?.bornDate}
+                helperText={errors?.bornDate?.message}
                 InputProps={{
                   inputProps: {
                     min: "1900-01-01",
@@ -133,7 +154,14 @@ function Register() {
           <Controller
             name="city"
             control={control}
-            render={({ field }) => <TextFieldMUI label="Cidade:" {...field} />}
+            render={({ field }) => (
+              <TextFieldMUI
+                label="Cidade:"
+                error={errors?.city}
+                helperText={errors?.city?.message}
+                {...field}
+              />
+            )}
           />
         </S.WrapperField>
         <S.WrapperField>
@@ -143,6 +171,8 @@ function Register() {
             render={({ field }) => (
               <TextFieldMUI
                 label="UF"
+                error={errors?.uf}
+                helperText={errors?.uf?.message}
                 inputProps={{ maxLength: 2 }}
                 {...field}
               />
@@ -150,7 +180,7 @@ function Register() {
           />
         </S.WrapperField>
         <S.WrapperButton>
-          <ButtonMUI type="submit" disabled={isDisabled}>
+          <ButtonMUI type="submit" disabled={isSubmitting}>
             Cadastrar
           </ButtonMUI>
           <ButtonMUI className="reset" onClick={resetForm}>

@@ -42,7 +42,6 @@ function Register() {
   });
 
   const resetForm = () => reset();
-
   const onSubmit = async (data) => {
     try {
       await registerUser(data);

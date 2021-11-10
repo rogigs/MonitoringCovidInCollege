@@ -10,6 +10,7 @@ import { authLogin } from "~/services/backend";
 import * as S from "./styles";
 import validationSchema from "./utils/validationSchema";
 import DialogMUI from "~/components/Dialog";
+import useUser from "~/hooks/useUser";
 
 const Login = () => {
   const [modal, setModal] = useState({

@@ -1,9 +1,9 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import PropTypes from "prop-types";
-import ButtonMUI from "../../../../../components/Button";
+import ButtonMUI from "~/components/Button";
 import * as S from "../../styles";
-import RadioMUI from "../../../../../components/Radio";
+import RadioMUI from "~/components/Radio";
 
 import RADIOS from "../../utils";
 import transformValuesRadiosInBoolean from "../../helpers";

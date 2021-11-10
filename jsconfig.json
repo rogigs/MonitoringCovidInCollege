@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "baseUrl": ".",
+    "module": "commonjs",
+    "paths": {
+      "~/*": ["src/*"],
+      "~pages/*": ["pages/*"],
+      "~static/*": ["static/*"],
+      "~tests/*": ["tests/*"]
+    }
+  },
+  "exclude": ["node_modules", "public", ".next", "dotenv"]
+}

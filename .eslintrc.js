@@ -21,10 +21,41 @@ module.exports = {
     sourceType: "module",
   },
   plugins: ["react", "only-warn"],
+  parser: "babel-eslint",
+  settings: {
+    react: {
+      version: "detect",
+    },
+    "import/resolver": {
+      "babel-plugin-root-import": [
+        {
+          rootPathSuffix: "./src",
+          rootPathPrefix: "~/",
+        },
+        {
+          rootPathSuffix: "./public/static",
+          rootPathPrefix: "~static/",
+        },
+        {
+          rootPathSuffix: "./public/assets",
+          rootPathPrefix: "~assets/",
+        },
+        {
+          rootPathSuffix: "./tests",
+          rootPathPrefix: "~tests/",
+        },
+        {
+          rootPathSuffix: "./pages",
+          rootPathPrefix: "~pages/",
+        },
+      ],
+    },
+  },
   rules: {
     "react/jsx-filename-extension": [1, { extensions: [".js", ".jsx"] }],
     "react/jsx-props-no-spreading": "off",
     "react/require-default-props": "off",
-    " react/forbid-prop-types": "off",
+    "react/forbid-prop-types": "off",
+    "import/prefer-default-export": "off",
   },
 };

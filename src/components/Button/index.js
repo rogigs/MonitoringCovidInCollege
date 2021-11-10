@@ -14,7 +14,7 @@ const ButtonMUI = ({
   disabled = false,
   onClick,
   className,
-  props,
+  ...props
 }) => (
   <ButtonStyled
     variant={variant ?? "contained"}

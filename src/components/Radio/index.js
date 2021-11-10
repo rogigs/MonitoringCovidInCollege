@@ -5,8 +5,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 import PropTypes from "prop-types";
 
-const RadioMUI = ({ radios, row = false, field }) => (
-  <RadioGroup row={row} {...field}>
+const RadioMUI = ({ radios, row = false, field, ...props }) => (
+  <RadioGroup row={row} {...field} {...props}>
     {radios.map((radioOption) => (
       <FormControlLabel
         key={`radio-${radioOption.label}`}

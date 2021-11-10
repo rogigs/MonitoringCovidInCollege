@@ -38,19 +38,31 @@ const Login = () => {
   const handleCloseModal = () => setModal({ ...modal, open: false });
 
   const onSubmit = async (data) => {
-    try {
-      await authLogin(data);
+    const responseVisualToUser = (message) => {
+      if (typeof message === "object") {
+        return router.push("/adm/dashboard");
+      }
 
-      router.push("/adm/dashboard");
-    } catch (error) {
-      setModal({
+      if (message === "Error: Request failed with status code 401") {
+        return setModal({
+          open: true,
+          title: "Erro ao logar",
+          message: "Número de matrícula/funcional ou senha incorretos",
+          buttonName: "Tentar novamente",
+        });
+      }
+
+      return setModal({
         open: true,
         title: "Erro ao logar",
-        message: "Nao foi possivel fazer o login, por favor tente novamente.",
+        message: "Número de matrícula/funcional ou senha incorretos",
         buttonName: "Tentar novamente",
       });
-    }
+    };
+
+    await authLogin(data, responseVisualToUser);
   };
+
   return (
     <S.WrappperMain>
       <div>

@@ -1,5 +1,4 @@
-import "../index.css";
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useRouter } from "next/router";
 
@@ -14,7 +13,7 @@ const App = ({ Component, pageProps }) => {
 
   const user = cookies.get("token");
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!user) {
       return router.push("/login");
     }

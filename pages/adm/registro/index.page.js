@@ -194,7 +194,7 @@ function Register() {
           />
         </S.WrapperField>
         <S.WrapperButton>
-          <ButtonMUI type="submit" disabled={isSubmitting}>
+          <ButtonMUI type="submit" loading={isSubmitting}>
             Cadastrar
           </ButtonMUI>
           <ButtonMUI className="reset" onClick={resetForm}>

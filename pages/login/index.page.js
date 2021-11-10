@@ -42,9 +42,9 @@ const Login = () => {
     try {
       const { token } = await authLogin(data);
 
-      cookies.set("token", token);
-
       router.push("/adm/dashboard");
+
+      cookies.set("token", token);
     } catch (error) {
       if (error.message === "Error: Request failed with status code 401") {
         setModal({
@@ -121,7 +121,7 @@ const Login = () => {
               )}
             />
             <S.WrapperButton>
-              <ButtonMUI type="submit" disabled={isSubmitting}>
+              <ButtonMUI type="submit" loading={isSubmitting}>
                 Entrar
               </ButtonMUI>
             </S.WrapperButton>

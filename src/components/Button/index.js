@@ -2,8 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Button } from "@material-ui/core";
 import styled from "styled-components";
+import DESIGN_SYSTEM from "~/css/designSystem";
 
 const ButtonStyled = styled(Button)`
+  border-radius: ${DESIGN_SYSTEM.spaces.spaceXxs};
   width: 100%;
 `;
 

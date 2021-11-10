@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import ButtonMUI from "~/components/Button";
 import * as S from "../../styles";
 import RadioMUI from "~/components/Radio";
-
 import RADIOS from "../../utils";
 import transformValuesRadiosInBoolean from "../../helpers";
 
@@ -21,7 +20,7 @@ function QuestAboutHealth() {
   };
 
   const RowOfFormWithRadios = ({ text, name }) => (
-    <S.WrapperField>
+    <S.WrapperRadios>
       <p className="label">{text} </p>
       <Controller
         name={name}
@@ -35,7 +34,7 @@ function QuestAboutHealth() {
           />
         )}
       />
-    </S.WrapperField>
+    </S.WrapperRadios>
   );
 
   RowOfFormWithRadios.propTypes = {
@@ -46,7 +45,7 @@ function QuestAboutHealth() {
   return (
     <S.Box>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <h1 className="title">Marque os sintomas que voce esta sentido</h1>
+        <h1 className="title">Marque os sintomas que vocë está sentido:</h1>
         <S.BoxRadios>
           <RowOfFormWithRadios text="Falta de ar" name="shortnessOfBreathe" />
           <RowOfFormWithRadios text="Cansaço" name="tiredness" />

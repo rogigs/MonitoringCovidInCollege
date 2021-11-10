@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
+import "../index.css";
+import React from "react";
+
 import { useRouter } from "next/router";
 
 import Cookies from "universal-cookie";
-
+import "./index.css";
 // This default export is required in a new `pages/_app.js` file.
 // eslint-disable-next-line react/prop-types
 const App = ({ Component, pageProps }) => {
@@ -12,7 +14,7 @@ const App = ({ Component, pageProps }) => {
 
   const user = cookies.get("token");
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!user) {
       return router.push("/login");
     }

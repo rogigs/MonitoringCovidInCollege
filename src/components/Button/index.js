@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Button } from "@material-ui/core";
+import { Button, CircularProgress } from "@material-ui/core";
 import styled from "styled-components";
 import DESIGN_SYSTEM from "~/css/designSystem";
 
@@ -16,6 +16,7 @@ const ButtonMUI = ({
   disabled = false,
   onClick,
   className,
+  loading,
   ...props
 }) => (
   <ButtonStyled
@@ -27,7 +28,7 @@ const ButtonMUI = ({
     className={className}
     {...props}
   >
-    {children}
+    {loading ? <CircularProgress color="inherit" size={24} /> : children}
   </ButtonStyled>
 );
 

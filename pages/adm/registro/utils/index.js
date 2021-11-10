@@ -7,6 +7,10 @@ const RADIOS = [
     value: "employee",
     label: "Colaboradores",
   },
+  {
+    value: "admin",
+    label: "Administrador",
+  },
 ];
 
 export default RADIOS;

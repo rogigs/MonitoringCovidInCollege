@@ -1,17 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { format } from "date-fns";
-import axios from "axios";
+import { yupResolver } from "@hookform/resolvers/yup";
+import validationSchema from "./utils/validationSchema";
 import TextFieldMUI from "~/components/TextField";
+import { registerUser } from "~/services/backend";
 
+import DialogMUI from "~/components/Dialog";
 import ButtonMUI from "~/components/Button";
 import * as S from "./styles";
 import RadioMUI from "~/components/Radio";
 import RADIOS from "./utils";
-// import { backendUrl } from "~/config";
 
 function Register() {
-  const { handleSubmit, control, watch, reset } = useForm({
+  const [modal, setModal] = useState({
+    open: false,
+    title: "",
+    message: "",
+    buttonName: "",
+    icon: "",
+  });
+
+  const handleCloseModal = () => setModal({ ...modal, open: false });
+
+  const {
+    handleSubmit,
+    control,
+    formState: { isSubmitting, errors },
+    reset,
+  } = useForm({
     mode: "onSubmit",
     defaultValues: {
       typeUser: "student",
@@ -21,34 +38,55 @@ function Register() {
       city: "",
       uf: "",
     },
+    resolver: yupResolver(validationSchema),
   });
 
-  const watched = watch();
-  const isDisabled = Object.values(watched).some((value) => value === "");
-
   const resetForm = () => reset();
-  // TODO: aleatory password
-  const onSubmit = (data) => console.log(data);
-  // axios
-  //   .post(`${backendUrl}/register`, {
-  //     admin_key: "admin_key",
-  //     code: data.registrationNumber,
-  //     password: data.registrationNumber,
-  //     full_name: data.fullName,
-  //     birth_date: data.bornDate,
-  //     city: data.city,
-  //     uf: data.uf,
-  //   })
-  //   .then((res) => {
-  //     console.log(res);
-  //     resetForm();
-  //   })
-  //   .catch((e) => {
-  //     console.log(e.response.data);
-  //   });
+  const onSubmit = async (data) => {
+    try {
+      await registerUser(data);
+
+      resetForm();
+
+      setModal({
+        open: true,
+        title: "Usuario cadastrado",
+        message: "Parabéns, o usuário foi cadastrado com sucesso",
+        buttonName: "Concluir",
+        icon: "success",
+      });
+    } catch (error) {
+      if (error.message === "User already exists") {
+        return setModal({
+          open: true,
+          title: "Erro ao registrar usuário",
+          message: "Você está tentando cadastrar um usúario que já existe",
+          buttonName: "Tentar novamente",
+          icon: "warning",
+        });
+      }
+
+      setModal({
+        open: true,
+        title: "Erro ao registrar usuário",
+        message:
+          "Não foi possível cadastrar o usuário, por favor tente novamente",
+        buttonName: "Tentar novamente",
+        icon: "danger",
+      });
+    }
+  };
 
   return (
     <S.Box>
+      <DialogMUI
+        open={modal?.open}
+        onClose={handleCloseModal}
+        buttonName={modal?.buttonName}
+        title={modal?.title}
+        children={modal?.message}
+        icon={modal?.icon}
+      />
       <form className="container" onSubmit={handleSubmit(onSubmit)}>
         <h1 className="title">Registro de usuários</h1>
         <S.WrapperField>
@@ -67,6 +105,8 @@ function Register() {
             render={({ field }) => (
               <TextFieldMUI
                 label="Número de matrícula(ou funcional):"
+                error={errors?.registrationNumber}
+                helperText={errors?.registrationNumber?.message}
                 {...field}
               />
             )}
@@ -77,16 +117,28 @@ function Register() {
             name="fullName"
             control={control}
             render={({ field }) => (
-              <TextFieldMUI label="Nome completo:" {...field} />
+              <TextFieldMUI
+                label="Nome completo:"
+                error={errors?.fullName}
+                helperText={errors?.fullName?.message}
+                {...field}
+              />
             )}
           />
         </S.WrapperField>
         {/* TODO: Will should a select with option of according typeUser  */}
         <S.WrapperField>
           <Controller
-            name=""
+            name="sector"
             control={control}
-            render={({ field }) => <TextFieldMUI label="Área:" {...field} />}
+            render={({ field }) => (
+              <TextFieldMUI
+                label="Área:"
+                error={errors?.sector}
+                helperText={errors?.sector?.message}
+                {...field}
+              />
+            )}
           />
         </S.WrapperField>
         <S.WrapperField>
@@ -97,6 +149,8 @@ function Register() {
               <TextFieldMUI
                 type="date"
                 label="Data de nascimento:"
+                error={errors?.bornDate}
+                helperText={errors?.bornDate?.message}
                 InputProps={{
                   inputProps: {
                     min: "1900-01-01",
@@ -113,7 +167,14 @@ function Register() {
           <Controller
             name="city"
             control={control}
-            render={({ field }) => <TextFieldMUI label="Cidade:" {...field} />}
+            render={({ field }) => (
+              <TextFieldMUI
+                label="Cidade:"
+                error={errors?.city}
+                helperText={errors?.city?.message}
+                {...field}
+              />
+            )}
           />
         </S.WrapperField>
         <S.WrapperField>
@@ -123,6 +184,8 @@ function Register() {
             render={({ field }) => (
               <TextFieldMUI
                 label="UF"
+                error={errors?.uf}
+                helperText={errors?.uf?.message}
                 inputProps={{ maxLength: 2 }}
                 {...field}
               />
@@ -130,7 +193,7 @@ function Register() {
           />
         </S.WrapperField>
         <S.WrapperButton>
-          <ButtonMUI type="submit" disabled={isDisabled}>
+          <ButtonMUI type="submit" loading={isSubmitting}>
             Cadastrar
           </ButtonMUI>
           <ButtonMUI className="reset" onClick={resetForm}>

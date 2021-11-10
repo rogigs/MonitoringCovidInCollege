@@ -3,7 +3,6 @@ import Cookies from "universal-cookie";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
-import ErrorOutlineSharp from "@material-ui/icons/ErrorOutlineSharp";
 import TextFieldMUI from "~/components/TextField";
 import ButtonMUI from "~/components/Button";
 import CheckboxMUI from "~/components/Checkbox";
@@ -11,6 +10,7 @@ import { authLogin } from "~/services/backend";
 import * as S from "./styles";
 import validationSchema from "./utils/validationSchema";
 import DialogMUI from "~/components/Dialog";
+import useUser from "~/hooks/useUser";
 
 const Login = () => {
   const [modal, setModal] = useState({
@@ -43,9 +43,9 @@ const Login = () => {
     try {
       const { token } = await authLogin(data);
 
-      cookies.set("token", token);
-
       router.push("/adm/dashboard");
+
+      cookies.set("token", token);
     } catch (error) {
       if (error.message === "Error: Request failed with status code 401") {
         setModal({
@@ -80,7 +80,7 @@ const Login = () => {
           buttonName={modal?.buttonName}
           title={modal?.title}
           children={modal?.message}
-          icon={<ErrorOutlineSharp sx={{ color: "red" }} fontSize="large" />}
+          icon="danger"
         />
         <S.Box>
           <form className="container" onSubmit={handleSubmit(onSubmit)}>
@@ -122,7 +122,7 @@ const Login = () => {
               )}
             />
             <S.WrapperButton>
-              <ButtonMUI type="submit" disabled={isSubmitting}>
+              <ButtonMUI type="submit" loading={isSubmitting}>
                 Entrar
               </ButtonMUI>
             </S.WrapperButton>

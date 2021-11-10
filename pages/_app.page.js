@@ -4,7 +4,6 @@ import React from "react";
 import { useRouter } from "next/router";
 
 import Cookies from "universal-cookie";
-import LayoutAdm from "~/components/layout/adm";
 import "./index.css";
 // This default export is required in a new `pages/_app.js` file.
 // eslint-disable-next-line react/prop-types

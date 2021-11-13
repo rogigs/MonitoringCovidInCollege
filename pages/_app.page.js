@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 
 import Cookies from "universal-cookie";
 import "./index.css";
+import Layout from "~/components/layout";
 // This default export is required in a new `pages/_app.js` file.
 // eslint-disable-next-line react/prop-types
 const App = ({ Component, pageProps }) => {
@@ -19,7 +20,15 @@ const App = ({ Component, pageProps }) => {
     }
   }, [user]);
 
-  return isBrowser ? <Component {...pageProps} /> : null;
+  if (router.pathname === "/login") {
+    return isBrowser ? <Component {...pageProps} /> : null;
+  }
+
+  return isBrowser ? (
+    <Layout>
+      <Component {...pageProps} />
+    </Layout>
+  ) : null;
 };
 
 export default App;

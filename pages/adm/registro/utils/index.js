@@ -1,15 +1,15 @@
 const RADIOS = [
   {
-    value: "student",
-    label: "Estudante",
+    value: "admin",
+    label: "Administrador",
   },
   {
     value: "employee",
     label: "Colaboradores",
   },
   {
-    value: "admin",
-    label: "Administrador",
+    value: "student",
+    label: "Estudante",
   },
 ];
 

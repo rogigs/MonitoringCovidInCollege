@@ -3,10 +3,12 @@ import React from "react";
 import { useRouter } from "next/router";
 import ButtonMUI from "~/components/Button";
 import * as S from "./styles";
+import TableUser from "~/components/Table/TableUser";
 
 function Dashboard() {
   const router = useRouter();
   const onClickRegister = () => router.push("/adm/registro");
+  const onClickViewMore = () => router.push("/adm/usuarios-cadastrados");
 
   return (
     <>
@@ -26,6 +28,10 @@ function Dashboard() {
           </ButtonMUI>
           <ButtonMUI onClick={onClickRegister}>Registro de usuários</ButtonMUI>
         </S.WrapperButton>
+        <p>Ultimos usuarios cadastrados:</p>
+
+        <TableUser />
+        <p onClick={onClickViewMore}>Ver mais</p>
       </S.Box>
       <S.Box>
         <p>Relatórios:</p>

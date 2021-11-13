@@ -45,7 +45,7 @@ function QuestAboutHealth() {
   return (
     <S.Box>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <h1 className="title">Marque os sintomas que vocë está sentido:</h1>
+        <h1 className="title">Marque os sintomas que você está sentido:</h1>
         <S.BoxRadios>
           <RowOfFormWithRadios text="Falta de ar" name="shortnessOfBreathe" />
           <RowOfFormWithRadios text="Cansaço" name="tiredness" />

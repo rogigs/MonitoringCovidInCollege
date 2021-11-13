@@ -10,10 +10,9 @@ export const Box = styled.div`
 
   ${media.greaterThan("tablet")`
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
+    
   
       .container {
         width: 50%;

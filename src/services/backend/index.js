@@ -1,5 +1,5 @@
 import StringHelper from "~/helpers/StringHelper";
-import HttpConfig from "./HttpConfig";
+import HttpConfig from "../HttpConfig";
 
 export const authLogin = async ({ user, password }) => {
   try {

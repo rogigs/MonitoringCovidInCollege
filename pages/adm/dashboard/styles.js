@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import media from "~/css/styledMedias";
 import DESIGN_SYSTEM from "~/css/designSystem";
 
 export const Box = styled.div`

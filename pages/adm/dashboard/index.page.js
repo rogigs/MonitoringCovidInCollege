@@ -7,8 +7,10 @@ import TableUser from "~/components/Table/TableUser";
 
 function Dashboard() {
   const router = useRouter();
+
   const onClickRegister = () => router.push("/adm/registro");
   const onClickViewMore = () => router.push("/adm/usuarios-cadastrados");
+  const onClickSympton = () => router.push("/adm/sintomas");
 
   return (
     <>
@@ -17,7 +19,7 @@ function Dashboard() {
         <p>Realizar registros de:</p>
         <S.WrapperButton>
           <ButtonMUI onClick={onClickRegister}>Usuários</ButtonMUI>
-          <ButtonMUI onClick={onClickRegister}>Sintomas</ButtonMUI>
+          <ButtonMUI onClick={onClickSympton}>Sintomas</ButtonMUI>
         </S.WrapperButton>
       </S.Box>
       <S.Box>

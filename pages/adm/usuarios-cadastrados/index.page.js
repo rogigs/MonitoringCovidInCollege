@@ -1,13 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import ButtonMUI from "~/components/Button";
 import TableUser from "~/components/Table/TableUser";
 import * as S from "./styles";
+import { getUsers } from "~/services/backend";
 
 function UsersRegistered() {
   const router = useRouter();
   const onClickRegister = () => router.push("/adm/registro");
+
+  const [users, setUsers] = useState([]);
+
+  useEffect(async () => {
+    const { users } = await getUsers();
+    users && setUsers(users);
+  }, [users]);
 
   return (
     <>
@@ -19,7 +27,7 @@ function UsersRegistered() {
 
       <br />
       <br />
-      <TableUser />
+      <TableUser data={users} />
     </>
   );
 }

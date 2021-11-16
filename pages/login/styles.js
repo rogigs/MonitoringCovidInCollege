@@ -7,12 +7,21 @@ export const WrappperMain = styled.main`
 
   iframe {
     background-color: #3490dc;
-    height: 100%;
-    width: 100%;
+    height: 0%;
+    width: 0%;
   }
 
   ${media.greaterThan("tablet")`
       grid-template-columns: 1fr 1fr;
+
+      iframe {
+        height: 100%;
+        width: 100%;
+      }
+  `}
+
+  ${media.lessThan("tablet")`
+      margin: 0 16px 0 16px;
   `}
 `;
 

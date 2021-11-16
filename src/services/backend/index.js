@@ -46,3 +46,26 @@ export const registerUser = async ({
     throw new Error(error.response.data.message);
   }
 };
+
+export const getUsers = async () => {
+  try {
+    const { data } = await HttpConfig.withToken.get("user/all");
+
+    return data;
+  } catch (error) {
+    throw new Error(error.response.data.message);
+  }
+};
+
+export const createSymptom = async (symptom) => {
+  try {
+    const { data } = await HttpConfig.withToken.post(
+      "/symptoms/create",
+      symptom
+    );
+
+    return data;
+  } catch (error) {
+    throw new Error(error.response.data.message);
+  }
+};

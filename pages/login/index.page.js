@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Cookies from "universal-cookie";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -10,7 +9,6 @@ import { authLogin } from "~/services/backend";
 import * as S from "./styles";
 import validationSchema from "./utils/validationSchema";
 import DialogMUI from "~/components/Dialog";
-import useUser from "~/hooks/useUser";
 
 const Login = () => {
   const [modal, setModal] = useState({
@@ -38,14 +36,13 @@ const Login = () => {
 
   const handleCloseModal = () => setModal({ ...modal, open: false });
 
-  const cookies = new Cookies();
   const onSubmit = async (data) => {
     try {
       const { token } = await authLogin(data);
 
       router.push("/adm/dashboard");
 
-      cookies.set("token", token);
+      localStorage.setItem("token", token);
     } catch (error) {
       if (error.message === "Error: Request failed with status code 401") {
         setModal({

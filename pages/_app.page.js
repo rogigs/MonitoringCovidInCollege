@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 
 import { useRouter } from "next/router";
 
-import Cookies from "universal-cookie";
 import "./index.css";
 import Layout from "~/components/layout";
 // This default export is required in a new `pages/_app.js` file.
@@ -10,9 +9,9 @@ import Layout from "~/components/layout";
 const App = ({ Component, pageProps }) => {
   const isBrowser = typeof window !== "undefined";
   const router = useRouter();
-  const cookies = new Cookies();
 
-  const user = cookies.get("token");
+  const user =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   useEffect(() => {
     if (!user) {

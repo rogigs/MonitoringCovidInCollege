@@ -11,10 +11,11 @@ function Dashboard() {
   const onClickRegister = () => router.push("/adm/registro");
   const onClickViewMore = () => router.push("/adm/usuarios-cadastrados");
   const onClickSympton = () => router.push("/adm/sintomas");
+  const onClickFrquency = () => router.push("/adm/frequencia");
 
   return (
     <>
-      <h1>Dashboard</h1> {/* box aqui */}
+      <h1>Dashboard</h1>
       <S.Box>
         <p>Realizar registros de:</p>
         <S.WrapperButton>
@@ -25,10 +26,10 @@ function Dashboard() {
       <S.Box>
         <p>Ver históricos de:</p>
         <S.WrapperButton>
-          <ButtonMUI onClick={onClickRegister}>
+          <ButtonMUI onClick={onClickFrquency}>
             Frequência de usuários
           </ButtonMUI>
-          <ButtonMUI onClick={onClickRegister}>Registro de usuários</ButtonMUI>
+          <ButtonMUI onClick={onClickViewMore}>Registro de usuários</ButtonMUI>
         </S.WrapperButton>
         <p>Ultimos usuarios cadastrados:</p>
 

@@ -34,7 +34,7 @@ export const registerUser = async ({
       code: registrationNumber,
       password: bornDate,
       full_name: fullName,
-      birth_date: StringHelper.formatStringToTimestamp(bornDate).getTime(), // timestamp
+      birth_date: StringHelper.formatStringToTimestamp(bornDate).getTime(),
       city,
       uf,
       sector,
@@ -63,6 +63,43 @@ export const createSymptom = async (symptom) => {
       "/symptoms/create",
       symptom
     );
+
+    return data;
+  } catch (error) {
+    throw new Error(error.response.data.message);
+  }
+};
+
+export const getSymptoms = async () => {
+  try {
+    const { data } = await HttpConfig.withToken.get("symptoms/");
+
+    return data;
+  } catch (error) {
+    throw new Error(error.response.data.message);
+  }
+};
+
+export const getFrequency = async ({ initialDate, finalDate }) => {
+  try {
+    const response = await HttpConfig.withToken.get("health/frequency", {
+      initial_date: StringHelper.formatStringToTimestamp(initialDate).getTime(),
+      final_date: StringHelper.formatStringToTimestamp(finalDate).getTime(),
+    });
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message);
+  }
+};
+
+export const registerHealth = async (listSymptoms) => {
+  try {
+    const today = new Date();
+    const data = await HttpConfig.withToken.post("health/register", {
+      symptoms: listSymptoms,
+      date: today.getTime(),
+    });
 
     return data;
   } catch (error) {

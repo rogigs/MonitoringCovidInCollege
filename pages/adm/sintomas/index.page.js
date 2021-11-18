@@ -7,6 +7,7 @@ import { createSymptom } from "~/services/backend";
 import DialogMUI from "~/components/Dialog";
 import ButtonMUI from "~/components/Button";
 import * as S from "./styles";
+import TableSymptom from "./components/TableSymptom";
 
 function Symptoms() {
   const [modal, setModal] = useState({
@@ -74,41 +75,41 @@ function Symptoms() {
   };
 
   return (
-    <S.Box>
-      <DialogMUI
-        open={modal?.open}
-        onClose={handleCloseModal}
-        buttonName={modal?.buttonName}
-        title={modal?.title}
-        children={modal?.message}
-        icon={modal?.icon}
-      />
-      <form className="container" onSubmit={handleSubmit(onSubmit)}>
-        <h1 className="title">Registro de sintoma</h1>
-        <S.WrapperTopButton>
-          <ButtonMUI onClick={() => {}}>Ver sintomas cadastrados</ButtonMUI>
-        </S.WrapperTopButton>
-        <S.WrapperField>
-          <Controller
-            name="symptom"
-            control={control}
-            render={({ field }) => (
-              <TextFieldMUI
-                label="Sintoma"
-                error={errors?.symptom}
-                helperText={errors?.symptom?.message}
-                {...field}
-              />
-            )}
-          />
-        </S.WrapperField>
-        <S.WrapperButton>
-          <ButtonMUI type="submit" loading={isSubmitting}>
-            Cadastrar
-          </ButtonMUI>
-        </S.WrapperButton>
-      </form>
-    </S.Box>
+    <>
+      <S.Box>
+        <DialogMUI
+          open={modal?.open}
+          onClose={handleCloseModal}
+          buttonName={modal?.buttonName}
+          title={modal?.title}
+          children={modal?.message}
+          icon={modal?.icon}
+        />
+        <form className="container" onSubmit={handleSubmit(onSubmit)}>
+          <h1 className="title">Registro de sintoma</h1>
+          <S.WrapperField>
+            <Controller
+              name="symptom"
+              control={control}
+              render={({ field }) => (
+                <TextFieldMUI
+                  label="Sintoma"
+                  error={errors?.symptom}
+                  helperText={errors?.symptom?.message}
+                  {...field}
+                />
+              )}
+            />
+          </S.WrapperField>
+          <S.WrapperButton>
+            <ButtonMUI type="submit" loading={isSubmitting}>
+              Cadastrar
+            </ButtonMUI>
+          </S.WrapperButton>
+        </form>
+      </S.Box>
+      <TableSymptom />
+    </>
   );
 }
 

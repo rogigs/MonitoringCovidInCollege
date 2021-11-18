@@ -14,6 +14,19 @@ export const authLogin = async ({ user, password }) => {
   }
 };
 
+export const resetPassword = async ({ newPassword, oldPassword }) => {
+  try {
+    const { data } = await HttpConfig.withToken.post(`auth/changePassword`, {
+      old_password: oldPassword,
+      new_password: newPassword,
+    });
+
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 export const registerUser = async ({
   registrationNumber,
   fullName,
@@ -32,7 +45,7 @@ export const registerUser = async ({
 
     const { data } = await HttpConfig.withToken.post(`auth/register`, {
       code: registrationNumber,
-      password: bornDate,
+      password: registrationNumber,
       full_name: fullName,
       birth_date: StringHelper.formatStringToTimestamp(bornDate).getTime(),
       city,

@@ -19,7 +19,7 @@ const App = ({ Component, pageProps }) => {
     }
   }, [user]);
 
-  if (router.pathname === "/login") {
+  if (router.pathname === "/login" || router.pathname === "/trocar-senha") {
     return isBrowser ? <Component {...pageProps} /> : null;
   }
 

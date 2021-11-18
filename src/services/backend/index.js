@@ -119,3 +119,12 @@ export const registerHealth = async (listSymptoms) => {
     throw new Error(error.response.data.message);
   }
 };
+
+export const healthHistoryUser = async () => {
+  try {
+    const data = await HttpConfig.withToken.get("/health/history");
+    return data;
+  } catch (error) {
+    throw new Error(error.response.data.message);
+  }
+};

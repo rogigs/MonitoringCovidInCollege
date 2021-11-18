@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import PropTypes from "prop-types";
+import { useRouter } from "next/router";
 import ButtonMUI from "~/components/Button";
 import * as S from "../../styles";
 import RadioMUI from "~/components/Radio";
@@ -9,7 +10,7 @@ import transformValuesRadiosInBoolean from "../../helpers";
 import { getSymptoms, registerHealth } from "~/services/backend";
 import DialogMUI from "~/components/Dialog";
 
-function QuestAboutHealth({ setRegistered }) {
+function QuestAboutHealth() {
   const [modal, setModal] = useState({
     open: false,
     title: "",
@@ -23,7 +24,7 @@ function QuestAboutHealth({ setRegistered }) {
   const { handleSubmit, control } = useForm({
     mode: "onSubmit",
   });
-
+  const router = useRouter();
   const [symptoms, setSymptoms] = useState([]);
 
   useEffect(async () => {
@@ -40,9 +41,8 @@ function QuestAboutHealth({ setRegistered }) {
 
       await registerHealth(filtered);
 
-      setRegistered(true);
+      router.push("/user/painel-de-registro");
     } catch (error) {
-      setRegistered(false);
       if (error.message === "Sintoma já existente.") {
         return setModal({
           open: true,

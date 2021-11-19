@@ -36,7 +36,6 @@ function Dashboard() {
       <S.Box>
         <p>Relatórios de:</p>
         <S.WrapperButton>
-          <ButtonMUI onClick={onClickRegister}>Criar relatórios</ButtonMUI>
           <ButtonMUI onClick={onClickStateHealth}>Estados de saúde</ButtonMUI>
         </S.WrapperButton>
       </S.Box>

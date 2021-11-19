@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import DESIGN_SYSTEM from "~/css/designSystem";
+import media from "~/css/styledMedias";
 
 export const Box = styled.div`
   border-radius: ${DESIGN_SYSTEM.spaces.spaceXxs};
@@ -12,5 +13,9 @@ export const Box = styled.div`
 export const WrapperButton = styled.div`
   display: grid;
   grid-gap: ${DESIGN_SYSTEM.spaces.space};
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
+
+  ${media.greaterThan("tablet")`
+    grid-template-columns: 1fr 1fr;
+  `}
 `;

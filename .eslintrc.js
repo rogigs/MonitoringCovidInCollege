@@ -14,13 +14,13 @@ module.exports = {
     "plugin:jest/recommended",
   ],
   parserOptions: {
+    baseUrl: "src",
     ecmaFeatures: {
       jsx: true,
     },
     ecmaVersion: 12,
-    sourceType: "module",
   },
-  plugins: ["react", "only-warn"],
+  plugins: ["react", "only-warn", "import"],
   parser: "babel-eslint",
   settings: {
     react: {
@@ -49,6 +49,9 @@ module.exports = {
           rootPathPrefix: "~pages/",
         },
       ],
+      node: {
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
+      },
     },
   },
   rules: {

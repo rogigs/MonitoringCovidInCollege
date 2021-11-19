@@ -3,7 +3,6 @@ import React from "react";
 import { useRouter } from "next/router";
 import ButtonMUI from "~/components/Button";
 import * as S from "./styles";
-import TableUser from "~/components/Table/TableUser";
 
 function Dashboard() {
   const router = useRouter();

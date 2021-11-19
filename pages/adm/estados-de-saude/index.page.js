@@ -1,20 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import dynamic from "next/dynamic";
 import TextFieldMUI from "~/components/TextField";
-import { getFrequency } from "~/services/backend";
+import { getReports } from "~/services/backend";
 import DialogMUI from "~/components/Dialog";
 import ButtonMUI from "~/components/Button";
 import * as S from "./styles";
+import TableReports from "./components/TableReports";
 
-const ApexChart = dynamic(() => import("react-apexcharts"), {
-  ssr: false,
-});
+function Symptoms() {
+  const [reports, setReports] = useState([]);
 
-function Frequency() {
-  const [dataChart, setDataChart] = useState([]);
+  useEffect(async () => {}, []);
 
   const [modal, setModal] = useState({
     open: false,
@@ -34,83 +32,38 @@ function Frequency() {
   } = useForm({
     mode: "onSubmit",
     defaultValues: {
-      initialDate: "",
+      symptom: "",
     },
-    resolver: yupResolver(
-      yup
-        .object({
-          initialDate: yup.string().required("Preencha o campo com o sintoma"),
-        })
-        .required()
-    ),
   });
 
   const resetForm = () => reset();
+
   const onSubmit = async (data) => {
     try {
-      const resp = await getFrequency(data);
+      const res = await getReports(data);
 
-      setDataChart(resp.data);
-
-      resetForm();
+      setReports(res.data);
     } catch (error) {
+      if (error.message === "Sintoma já existente.") {
+        return setModal({
+          open: true,
+          title: "Erro ao registrar sintoma",
+          message: "Você está tentando cadastrar um sintoma que já existe",
+          buttonName: "Tentar novamente",
+          icon: "warning",
+        });
+      }
+
       return setModal({
         open: true,
-        title: "Erro ao filtrar dados",
+        title: "Erro ao registrar sintoma",
         message:
-          "Não foi possível filtrar os dados, por favor tente novamente.",
+          "Não foi possível cadastrar o sintoma, por favor tente novamente",
         buttonName: "Tentar novamente",
         icon: "danger",
       });
     }
   };
-
-  const options = {
-    chart: {
-      id: "barYear",
-      width: "100%",
-      type: "bar",
-    },
-    plotOptions: {
-      bar: {
-        distributed: true,
-        horizontal: true,
-        barHeight: "75%",
-        dataLabels: {
-          position: "bottom",
-        },
-      },
-    },
-    dataLabels: {
-      enabled: true,
-      textAnchor: "start",
-      style: {
-        colors: ["#fff"],
-      },
-      formatter(val, opt) {
-        return opt.w.globals.labels[opt.dataPointIndex];
-      },
-      offsetX: 0,
-      dropShadow: {
-        enabled: true,
-      },
-    },
-    xaxis: {
-      categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
-    },
-    yaxis: {
-      labels: {
-        show: false,
-      },
-    },
-  };
-
-  const series = [
-    {
-      name: "series-1",
-      data: [30, 40, 45, 50, 49, 60, 70, 91],
-    },
-  ];
 
   return (
     <>
@@ -124,7 +77,7 @@ function Frequency() {
           icon={modal?.icon}
         />
         <form className="container" onSubmit={handleSubmit(onSubmit)}>
-          <h1 className="title">Ver frequência de usuários</h1>
+          <h1 className="title">Ver estados de saúde</h1>
           <S.WrapperField>
             <Controller
               name="initialDate"
@@ -155,23 +108,17 @@ function Frequency() {
               )}
             />
           </S.WrapperField>
+          {/* TODO: Adicionar checkobox setor */}
           <S.WrapperButton>
             <ButtonMUI type="submit" loading={isSubmitting}>
               Filtrar
             </ButtonMUI>
           </S.WrapperButton>
-          <S.WrapperChart>
-            <ApexChart
-              options={options}
-              series={series}
-              type="bar"
-              height="400"
-            />
-          </S.WrapperChart>
         </form>
       </S.Box>
+      <TableReports reports={reports} />
     </>
   );
 }
 
-export default Frequency;
+export default Symptoms;

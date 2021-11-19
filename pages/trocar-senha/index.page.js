@@ -4,8 +4,7 @@ import { useRouter } from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
 import TextFieldMUI from "~/components/TextField";
 import ButtonMUI from "~/components/Button";
-import CheckboxMUI from "~/components/Checkbox";
-import { authLogin } from "~/services/backend";
+import { resetPassword } from "~/services/backend";
 import * as S from "./styles";
 import validationSchema from "./utils/validationSchema";
 import DialogMUI from "~/components/Dialog";
@@ -38,29 +37,15 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
-      const { token } = await authLogin(data);
+      await resetPassword(data);
 
-      const { user, password } = data;
-
-      localStorage.setItem("token", token);
-
-      user === password
-        ? router.push("/trocar-senha")
-        : router.push("/adm/dashboard");
+      router.push("/adm/dashboard");
     } catch (error) {
-      if (error.message === "Error: Request failed with status code 401") {
-        setModal({
-          open: true,
-          title: "Erro ao logar",
-          message: "Número de matrícula/funcional ou senha incorretos",
-          buttonName: "Tentar novamente",
-        });
-      }
-
       setModal({
         open: true,
-        title: "Erro ao logar",
-        message: "Número de matrícula/funcional ou senha incorretos",
+        title: "Erro ao trocar de senha",
+        message:
+          "Não foi possível realizar a troca de senha. Verifique se a antiga senha está correta.",
         buttonName: "Tentar novamente",
       });
     }
@@ -88,13 +73,14 @@ const Login = () => {
             <h1 className="title">COVID Monitoring</h1>
             <S.WrapperField>
               <Controller
-                name="user"
+                name="oldPassword"
                 control={control}
                 render={({ field }) => (
                   <TextFieldMUI
-                    label="Número de matrícula(ou funcional):"
-                    error={errors?.user}
-                    helperText={errors?.user?.message}
+                    type="password"
+                    label="Senha antiga:"
+                    error={errors?.oldPassword}
+                    helperText={errors?.oldPassword?.message}
                     {...field}
                   />
                 )}
@@ -102,29 +88,22 @@ const Login = () => {
             </S.WrapperField>
             <S.WrapperField>
               <Controller
-                name="password"
+                name="newPassword"
                 control={control}
                 render={({ field }) => (
                   <TextFieldMUI
                     type="password"
-                    label="Senha:"
-                    error={errors?.password}
-                    helperText={errors?.password?.message}
+                    label="Nova senha:"
+                    error={errors?.newPassword}
+                    helperText={errors?.newPassword?.message}
                     {...field}
                   />
                 )}
               />
             </S.WrapperField>
-            <Controller
-              name="keepMeConnected"
-              control={control}
-              render={({ field }) => (
-                <CheckboxMUI label="Manter-me conectado" {...field} />
-              )}
-            />
             <S.WrapperButton>
               <ButtonMUI type="submit" loading={isSubmitting}>
-                Entrar
+                Trocar senha
               </ButtonMUI>
             </S.WrapperButton>
           </form>

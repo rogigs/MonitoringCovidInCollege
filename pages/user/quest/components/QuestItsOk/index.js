@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import PropTypes from "prop-types";
+import { useRouter } from "next/router";
 import ButtonMUI from "~/components/Button";
 import * as S from "../../styles";
 import RadioMUI from "~/components/Radio";
-
+import { registerHealth } from "~/services/backend";
+import DialogMUI from "~/components/Dialog";
 import RADIOS from "../../utils";
 
 function QuestItsOk({ setQuestItsOk }) {
@@ -15,51 +17,84 @@ function QuestItsOk({ setQuestItsOk }) {
     },
   });
 
-  const [showMessage, setShowMessage] = useState(false);
+  const router = useRouter();
+
+  const [modal, setModal] = useState({
+    open: false,
+    title: "",
+    message: "",
+    buttonName: "",
+    icon: "",
+  });
+
+  const handleCloseModal = () => setModal({ ...modal, open: false });
+
+  const submitData = async () => {
+    try {
+      await registerHealth([]);
+
+      router.push("/user/painel-de-registro");
+    } catch (error) {
+      if (error.message === "Sintoma já existente.") {
+        return setModal({
+          open: true,
+          title: "Erro ao registrar sintomas",
+          message: "O registro já foi feito hoje, tente novamente amanhã.",
+          buttonName: "Concluir",
+          icon: "warning",
+        });
+      }
+
+      return setModal({
+        open: true,
+        title: "Erro ao registrar sintomas",
+        message:
+          "Não foi possível cadastrar o sintoma, por favor tente novamente",
+        buttonName: "Tentar novamente",
+        icon: "danger",
+      });
+    }
+  };
 
   const onSubmit = (data) => {
-    // TODO: Resolve the bug of Next.js with material-ui
-    //        \-> the bug don't render checked radio when the value is of type booolean
     const formattedData = data.itsOk === "ok";
 
     setQuestItsOk(formattedData);
-    formattedData && setShowMessage(true);
 
-    // TODO: virfify if change day
+    formattedData && submitData();
   };
 
   return (
     <S.Box>
-      {showMessage ? (
-        <>
-          <h1>Obrigado pela colaboração!</h1>
-          <button onClick={() => setShowMessage(false)}>
-            Apagar [Apenas para resetar o estado]
-          </button>
-        </>
-      ) : (
-        <form className="container" onSubmit={handleSubmit(onSubmit)}>
-          <h1 className="title">Como você está se sentindo hoje?</h1>
-          <S.BoxRadios>
-            <S.WrapperField>
-              <Controller
-                name="itsOk"
-                control={control}
-                render={({ field }) => (
-                  <RadioMUI
-                    row
-                    radios={RADIOS.RADIOS_QUEST_ITS_OK}
-                    field={field}
-                  />
-                )}
-              />
-            </S.WrapperField>
-          </S.BoxRadios>
-          <S.WrapperButton>
-            <ButtonMUI type="submit">Registrar</ButtonMUI>
-          </S.WrapperButton>
-        </form>
-      )}
+      <form className="container" onSubmit={handleSubmit(onSubmit)}>
+        <DialogMUI
+          open={modal?.open}
+          onClose={handleCloseModal}
+          buttonName={modal?.buttonName}
+          title={modal?.title}
+          children={modal?.message}
+          icon={modal?.icon}
+        />
+        <h1 className="title">Como você está se sentindo hoje?</h1>
+        <S.BoxRadios>
+          <S.WrapperField>
+            <Controller
+              name="itsOk"
+              control={control}
+              render={({ field }) => (
+                <RadioMUI
+                  row
+                  radios={RADIOS.RADIOS_QUEST_ITS_OK}
+                  field={field}
+                />
+              )}
+            />
+          </S.WrapperField>
+        </S.BoxRadios>
+        <S.WrapperButton>
+          <ButtonMUI type="submit">Registrar</ButtonMUI>
+        </S.WrapperButton>
+      </form>
     </S.Box>
   );
 }

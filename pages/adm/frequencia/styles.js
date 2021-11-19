@@ -2,29 +2,6 @@ import styled from "styled-components";
 import media from "~/css/styledMedias";
 import DESIGN_SYSTEM from "~/css/designSystem";
 
-export const WrappperMain = styled.main`
-  display: grid;
-
-  iframe {
-    background-color: #3490dc;
-    height: 0%;
-    width: 0%;
-  }
-
-  ${media.greaterThan("tablet")`
-      grid-template-columns: 1fr 1fr;
-
-      iframe {
-        height: 100%;
-        width: 100%;
-      }
-  `}
-
-  ${media.lessThan("tablet")`
-      margin: 0 16px 0 16px;
-  `}
-`;
-
 export const Box = styled.div`
   .title {
     text-align: center;
@@ -33,10 +10,9 @@ export const Box = styled.div`
 
   ${media.greaterThan("tablet")`
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
+    
   
       .container {
         width: 50%;
@@ -46,13 +22,31 @@ export const Box = styled.div`
 
 export const WrapperField = styled.div`
   margin-bottom: ${DESIGN_SYSTEM.spaces.spaceSm};
+  margin-top: ${DESIGN_SYSTEM.spaces.spaceSm};
+`;
+
+export const WrapperTopButton = styled.div`
+  margin-bottom: ${DESIGN_SYSTEM.spaces.spaceSm};
+  display: flex;
+  justify-content: end;
+
+  ${media.greaterThan("tablet")`
+    button {
+      width: 35%;
+    }
+      
+  `}
 `;
 
 export const WrapperButton = styled.div`
-  padding-top: ${DESIGN_SYSTEM.spaces.spaceSm};
+  .reset {
+    margin-top: ${DESIGN_SYSTEM.spaces.spaceSm};
+  }
 
   ${media.greaterThan("tablet")`
       margin: 0 auto;
       width: 50%;
   `}
 `;
+
+export const WrapperChart = styled.div``;

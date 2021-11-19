@@ -24,6 +24,19 @@ export const WrapperField = styled.div`
   margin-bottom: ${DESIGN_SYSTEM.spaces.spaceSm};
 `;
 
+export const WrapperTopButton = styled.div`
+  margin-bottom: ${DESIGN_SYSTEM.spaces.spaceSm} ${DESIGN_SYSTEM.spaces.spaceSm};
+  display: flex;
+  justify-content: end;
+
+  ${media.greaterThan("tablet")`
+    button {
+      width: 35%;
+    }
+      
+  `}
+`;
+
 export const WrapperButton = styled.div`
   .reset {
     margin-top: ${DESIGN_SYSTEM.spaces.spaceSm};

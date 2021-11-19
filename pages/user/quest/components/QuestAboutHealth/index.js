@@ -1,22 +1,67 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import PropTypes from "prop-types";
+import { useRouter } from "next/router";
 import ButtonMUI from "~/components/Button";
 import * as S from "../../styles";
 import RadioMUI from "~/components/Radio";
 import RADIOS from "../../utils";
 import transformValuesRadiosInBoolean from "../../helpers";
+import { getSymptoms, registerHealth } from "~/services/backend";
+import DialogMUI from "~/components/Dialog";
 
 function QuestAboutHealth() {
+  const [modal, setModal] = useState({
+    open: false,
+    title: "",
+    message: "",
+    buttonName: "",
+    icon: "",
+  });
+
+  const handleCloseModal = () => setModal({ ...modal, open: false });
+
   const { handleSubmit, control } = useForm({
     mode: "onSubmit",
   });
+  const router = useRouter();
+  const [symptoms, setSymptoms] = useState([]);
 
-  const onSubmit = (data) => {
-    // TODO: Resolve the bug of Next.js with material-ui
-    //        \-> the bug don't render checked radio when the value is of type booolean
-    transformValuesRadiosInBoolean(data);
-    console.log(data);
+  useEffect(async () => {
+    const { symptoms } = await getSymptoms();
+    symptoms && setSymptoms(symptoms);
+  }, []);
+
+  const onSubmit = async (data) => {
+    try {
+      transformValuesRadiosInBoolean(data);
+
+      const keys = Object.keys(data);
+      const filtered = keys.filter((key) => data[key]);
+
+      await registerHealth(filtered);
+
+      router.push("/user/painel-de-registro");
+    } catch (error) {
+      if (error.message === "Sintoma já existente.") {
+        return setModal({
+          open: true,
+          title: "Erro ao registrar sintomas",
+          message: "O registro já foi feito hoje, tente novamente amanhã.",
+          buttonName: "Concluir",
+          icon: "warning",
+        });
+      }
+
+      return setModal({
+        open: true,
+        title: "Erro ao registrar sintomas",
+        message:
+          "Não foi possível cadastrar o sintoma, por favor tente novamente",
+        buttonName: "Tentar novamente",
+        icon: "danger",
+      });
+    }
   };
 
   const RowOfFormWithRadios = ({ text, name }) => (
@@ -44,22 +89,20 @@ function QuestAboutHealth() {
 
   return (
     <S.Box>
+      <DialogMUI
+        open={modal?.open}
+        onClose={handleCloseModal}
+        buttonName={modal?.buttonName}
+        title={modal?.title}
+        children={modal?.message}
+        icon={modal?.icon}
+      />
       <form onSubmit={handleSubmit(onSubmit)}>
         <h1 className="title">Marque os sintomas que você está sentido:</h1>
         <S.BoxRadios>
-          <RowOfFormWithRadios text="Falta de ar" name="shortnessOfBreathe" />
-          <RowOfFormWithRadios text="Cansaço" name="tiredness" />
-          <RowOfFormWithRadios text="Febre" name="ferver" />
-          <RowOfFormWithRadios text="Calafrio" name="chill" />
-          <RowOfFormWithRadios text="Tosse" name="cough" />
-          <RowOfFormWithRadios text="Dor de garganta" name="soreThroat" />
-          <RowOfFormWithRadios text="Dor de cabeça" name="headache" />
-          <RowOfFormWithRadios text="Dor no peito" name="headache" />
-          <RowOfFormWithRadios text="Dores musculares" name="chestPain" />
-          <RowOfFormWithRadios text="Perda de olfato" name="lossOfSmell" />
-          <RowOfFormWithRadios text="Perda de paladar" name="lossOfTaste" />
-          <RowOfFormWithRadios text="Diarréia" name="diarrhea" />
-          <RowOfFormWithRadios text="Espirros" name="sneezes" />
+          {symptoms.map((symptom) => (
+            <RowOfFormWithRadios text={symptom.name} name={symptom.name} />
+          ))}
         </S.BoxRadios>
         <S.WrapperButton>
           <ButtonMUI type="submit">Registrar</ButtonMUI>

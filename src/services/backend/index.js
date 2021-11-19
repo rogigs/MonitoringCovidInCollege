@@ -16,7 +16,7 @@ export const authLogin = async ({ user, password }) => {
 
 export const resetPassword = async ({ newPassword, oldPassword }) => {
   try {
-    const { data } = await HttpConfig.withToken.post(`auth/changePassword`, {
+    const { data } = await HttpConfig.withToken.post("auth/changePassword", {
       old_password: oldPassword,
       new_password: newPassword,
     });
@@ -43,7 +43,7 @@ export const registerUser = async ({
       admin: 9,
     };
 
-    const { data } = await HttpConfig.withToken.post(`auth/register`, {
+    const { data } = await HttpConfig.withToken.post("auth/register", {
       code: registrationNumber,
       password: registrationNumber,
       full_name: fullName,
@@ -93,11 +93,31 @@ export const getSymptoms = async () => {
   }
 };
 
+export const getReports = async ({ initialDate, finalDate }) => {
+  try {
+    const { data } = await HttpConfig.withToken.get("health/report", {
+      params: {
+        by_sector: "True",
+        initial_date:
+          StringHelper.formatStringToTimestamp(initialDate).getTime(),
+        final_date: StringHelper.formatStringToTimestamp(finalDate).getTime(),
+      },
+    });
+
+    return data;
+  } catch (error) {
+    throw new Error(error.response.data.message);
+  }
+};
+
 export const getFrequency = async ({ initialDate, finalDate }) => {
   try {
     const response = await HttpConfig.withToken.get("health/frequency", {
-      initial_date: StringHelper.formatStringToTimestamp(initialDate).getTime(),
-      final_date: StringHelper.formatStringToTimestamp(finalDate).getTime(),
+      params: {
+        initial_date:
+          StringHelper.formatStringToTimestamp(initialDate).getTime(),
+        final_date: StringHelper.formatStringToTimestamp(finalDate).getTime(),
+      },
     });
 
     return response.data;
@@ -122,7 +142,7 @@ export const registerHealth = async (listSymptoms) => {
 
 export const healthHistoryUser = async () => {
   try {
-    const data = await HttpConfig.withToken.get("/health/history");
+    const data = await HttpConfig.withToken.get("health/history");
     return data;
   } catch (error) {
     throw new Error(error.response.data.message);

@@ -8,11 +8,4 @@ export const Card = styled.div`
   padding: ${DESIGN_SYSTEM.spaces.spaceSm};
   margin-bottom: ${DESIGN_SYSTEM.spaces.spaceSm};
   overflow: hidden;
-
-  > * {
-    &:first-child {
-      text-align: center;
-      margin-bottom: ${DESIGN_SYSTEM.spaces.space};
-    }
-  }
 `;

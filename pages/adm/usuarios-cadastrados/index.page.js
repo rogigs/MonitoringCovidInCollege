@@ -15,7 +15,7 @@ function UsersRegistered() {
   useEffect(async () => {
     const { users } = await getUsers();
     users && setUsers(users);
-  }, [users]);
+  }, []);
 
   return (
     <>

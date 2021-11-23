@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import TextFieldMUI from "~/components/TextField";
 import { getReports } from "~/services/backend";
@@ -11,8 +10,6 @@ import TableReports from "./components/TableReports";
 
 function Symptoms() {
   const [reports, setReports] = useState([]);
-
-  useEffect(async () => {}, []);
 
   const [modal, setModal] = useState({
     open: false,

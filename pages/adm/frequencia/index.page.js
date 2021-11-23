@@ -16,7 +16,10 @@ const ApexChart = dynamic(() => import("react-apexcharts"), {
 });
 
 function Frequency() {
-  const [dataChart, setDataChart] = useState([]);
+  const [dataChart, setDataChart] = useState({
+    series: [],
+    xAxis: [],
+  });
 
   const [modal, setModal] = useState({
     open: false,
@@ -32,7 +35,6 @@ function Frequency() {
     handleSubmit,
     control,
     formState: { isSubmitting, errors },
-    reset,
   } = useForm({
     mode: "onSubmit",
     defaultValues: {
@@ -42,15 +44,16 @@ function Frequency() {
     resolver: yupResolver(validationSchema),
   });
 
-  const resetForm = () => reset();
   const onSubmit = async (data) => {
     try {
       const frequency = await getFrequency(data);
 
-      resetForm();
+      if (Object.keys(frequency).length === 0) {
+        throw new Error({ message: "Período inválido." });
+      }
 
       const series = Object.values(frequency);
-      const xAxis = Object.keys(frequency).keys((key) =>
+      const xAxis = Object.keys(frequency).map((key) =>
         StringHelper.formatTimestampToDateReadble(key)
       );
 

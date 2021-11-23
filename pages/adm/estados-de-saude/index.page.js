@@ -2,17 +2,39 @@ import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
+import dynamic from "next/dynamic";
 import TextFieldMUI from "~/components/TextField";
 import { getReports } from "~/services/backend";
 import DialogMUI from "~/components/Dialog";
 import ButtonMUI from "~/components/Button";
 import * as S from "./styles";
-import TableReports from "./components/TableReports";
+
 import TitleHeader from "~/components/TitleHeader";
 import validationSchema from "./utils/validationSchema";
+import RadioMUI from "~/components/Radio";
+import StringHelper from "~/helpers/StringHelper";
 
-function Symptoms() {
-  const [reports, setReports] = useState([]);
+const ApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
+
+const RADIOS = [
+  {
+    value: "ok",
+    label: "Sim",
+  },
+  {
+    value: "-",
+    label: "Não",
+  },
+];
+
+function StateHealth() {
+  const [dataChart, setDataChart] = useState({
+    seriesHealth: [],
+    xAxis: [],
+    seriesUnhealthy: [],
+  });
 
   const [modal, setModal] = useState({
     open: false,
@@ -28,27 +50,34 @@ function Symptoms() {
     handleSubmit,
     control,
     formState: { isSubmitting, errors },
-    reset,
   } = useForm({
     mode: "onSubmit",
     defaultValues: {
       initialDate: "",
       finalDate: "",
+      bySector: "-",
     },
     resolver: yupResolver(validationSchema),
   });
 
-  const resetForm = () => reset();
-
   const onSubmit = async (data) => {
     try {
-      const res = await getReports(data);
+      const reports = await getReports(data);
 
-      resetForm();
+      const xAxis = Object.keys(reports).map((key) =>
+        StringHelper.formatTimestampToDateReadble(key)
+      );
 
-      return setReports(res.data);
+      const seriesHealth = Object.values(reports).map(
+        (values) => values.healthy
+      );
+      const seriesUnhealthy = Object.values(reports).map(
+        (values) => values.unhealthy
+      );
+
+      return setDataChart({ seriesHealth, xAxis, seriesUnhealthy });
     } catch (error) {
-      if (error.message === "Sem registros.") {
+      if (error.message === "Período inválido.") {
         return setModal({
           open: true,
           title: "Erro ao buscar registros",
@@ -69,6 +98,60 @@ function Symptoms() {
       });
     }
   };
+
+  const options = {
+    series: [
+      {
+        data: [44, 55, 41, 64, 22, 43, 21],
+      },
+      {
+        data: [53, 32, 33, 52, 13, 44, 32],
+      },
+    ],
+    chart: {
+      type: "bar",
+      height: 430,
+    },
+    plotOptions: {
+      bar: {
+        horizontal: true,
+        dataLabels: {
+          position: "top",
+        },
+      },
+    },
+    dataLabels: {
+      enabled: true,
+      offsetX: -6,
+      style: {
+        fontSize: "12px",
+        colors: ["#fff"],
+      },
+    },
+    stroke: {
+      show: true,
+      width: 1,
+      colors: ["#fff"],
+    },
+    tooltip: {
+      shared: true,
+      intersect: false,
+    },
+    xaxis: {
+      categories: dataChart.xAxis ?? [],
+    },
+  };
+
+  const series = [
+    {
+      name: "Com saúde:",
+      data: dataChart.seriesHealth ?? [],
+    },
+    {
+      name: "Sem saúde:",
+      data: dataChart.seriesUnhealthy ?? [],
+    },
+  ];
 
   return (
     <>
@@ -113,16 +196,27 @@ function Symptoms() {
             )}
           />
         </S.WrapperField>
-        {/* TODO: Adicionar checkobox setor */}
+        <S.WrapperRadios>
+          <p className="label">Filtrar por setor: </p>
+          <Controller
+            name="bySector"
+            control={control}
+            render={({ field }) => (
+              <RadioMUI row radios={RADIOS} field={field} />
+            )}
+          />
+        </S.WrapperRadios>
         <S.WrapperButton>
           <ButtonMUI type="submit" loading={isSubmitting}>
             Filtrar
           </ButtonMUI>
         </S.WrapperButton>
       </form>
-      <TableReports reports={reports} />
+      <S.WrapperChart>
+        <ApexChart options={options} series={series} type="bar" height="400" />
+      </S.WrapperChart>
     </>
   );
 }
 
-export default Symptoms;
+export default StateHealth;

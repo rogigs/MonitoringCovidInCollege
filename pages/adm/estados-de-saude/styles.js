@@ -28,3 +28,17 @@ export const WrapperButton = styled.div`
       width: 50%;
   `}
 `;
+
+export const WrapperRadios = styled.div`
+  display: flex;
+  justify-content: start;
+
+  .label {
+    min-width: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+`;
+
+export const WrapperChart = styled.div``;

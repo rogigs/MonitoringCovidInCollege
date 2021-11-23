@@ -21,7 +21,7 @@ export const WrapperTopButton = styled.div`
 `;
 
 export const WrapperButton = styled.div`
-  margin-bottom: ${DESIGN_SYSTEM.spaces.space};
+  padding-bottom: ${DESIGN_SYSTEM.spaces.space};
 
   ${media.greaterThan("tablet")`
       margin: 0 auto;

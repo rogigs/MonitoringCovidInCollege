@@ -8,6 +8,7 @@ import DialogMUI from "~/components/Dialog";
 import ButtonMUI from "~/components/Button";
 import * as S from "./styles";
 import validationSchema from "./utils/validationSchema";
+import TitleHeader from "~/components/TitleHeader";
 
 const ApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -43,11 +44,14 @@ function Frequency() {
   const resetForm = () => reset();
   const onSubmit = async (data) => {
     try {
-      const resp = await getFrequency(data);
+      const frequency = await getFrequency(data);
 
       resetForm();
 
-      return setDataChart(resp.data);
+      const series = Object.values(frequency);
+      const xAxis = Object.keys(frequency);
+
+      return setDataChart({ series, xAxis });
     } catch (error) {
       if (error.message === "Período inválido.") {
         return setModal({
@@ -102,7 +106,7 @@ function Frequency() {
       },
     },
     xaxis: {
-      categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
+      categories: dataChart.xAxis ?? [],
     },
     yaxis: {
       labels: {
@@ -113,8 +117,8 @@ function Frequency() {
 
   const series = [
     {
-      name: "series-1",
-      data: [30, 40, 45, 50, 49, 60, 70, 91],
+      name: "Frequência:",
+      data: dataChart.series ?? [],
     },
   ];
 
@@ -131,7 +135,7 @@ function Frequency() {
           <p>{modal?.message}</p>
         </DialogMUI>
         <form className="container" onSubmit={handleSubmit(onSubmit)}>
-          <h1 className="title">Ver frequência de usuários</h1>
+          <TitleHeader title="Ver frequência de usuários" />
           <S.WrapperField>
             <Controller
               name="initialDate"

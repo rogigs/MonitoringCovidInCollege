@@ -7,6 +7,7 @@ import DialogMUI from "~/components/Dialog";
 import ButtonMUI from "~/components/Button";
 import * as S from "./styles";
 import TableReports from "./components/TableReports";
+import TitleHeader from "~/components/TitleHeader";
 
 function Symptoms() {
   const [reports, setReports] = useState([]);
@@ -39,13 +40,16 @@ function Symptoms() {
     try {
       const res = await getReports(data);
 
-      setReports(res.data);
+      resetForm();
+
+      return setReports(res.data);
     } catch (error) {
-      if (error.message === "Sintoma já existente.") {
+      if (error.message === "Sem registros.") {
         return setModal({
           open: true,
-          title: "Erro ao registrar sintoma",
-          message: "Você está tentando cadastrar um sintoma que já existe",
+          title: "Erro ao buscar registros",
+          message:
+            "Não existem registros nas datas selecionadas. Tente novamente com outras datas.",
           buttonName: "Tentar novamente",
           icon: "warning",
         });
@@ -53,9 +57,9 @@ function Symptoms() {
 
       return setModal({
         open: true,
-        title: "Erro ao registrar sintoma",
+        title: "Erro ao buscar registros",
         message:
-          "Não foi possível cadastrar o sintoma, por favor tente novamente",
+          "Não foi possível buscar os registros, por favor tente novamente",
         buttonName: "Tentar novamente",
         icon: "danger",
       });
@@ -64,55 +68,54 @@ function Symptoms() {
 
   return (
     <>
-      <S.Box>
-        <DialogMUI
-          open={modal?.open}
-          onClose={handleCloseModal}
-          buttonName={modal?.buttonName}
-          title={modal?.title}
-          children={modal?.message}
-          icon={modal?.icon}
-        />
-        <form className="container" onSubmit={handleSubmit(onSubmit)}>
-          <h1 className="title">Ver estados de saúde</h1>
-          <S.WrapperField>
-            <Controller
-              name="initialDate"
-              control={control}
-              render={({ field }) => (
-                <TextFieldMUI
-                  label="Data inicial:"
-                  type="date"
-                  error={errors?.initialDate}
-                  helperText={errors?.initialDate?.message}
-                  {...field}
-                />
-              )}
-            />
-          </S.WrapperField>
-          <S.WrapperField>
-            <Controller
-              name="finalDate"
-              control={control}
-              render={({ field }) => (
-                <TextFieldMUI
-                  label="Data final:"
-                  type="date"
-                  error={errors?.finalDate}
-                  helperText={errors?.finalDate?.message}
-                  {...field}
-                />
-              )}
-            />
-          </S.WrapperField>
-          {/* TODO: Adicionar checkobox setor */}
-          <S.WrapperButton>
-            <ButtonMUI type="submit" loading={isSubmitting}>
-              Filtrar
-            </ButtonMUI>
-          </S.WrapperButton>
-        </form>
-      </S.Box>
+      <DialogMUI
+        open={modal?.open}
+        onClose={handleCloseModal}
+        buttonName={modal?.buttonName}
+        title={modal?.title}
+        icon={modal?.icon}
+      >
+        <p>{modal?.message}</p>
+      </DialogMUI>
+      <TitleHeader title="Ver estados de saúde" />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <S.WrapperField>
+          <Controller
+            name="initialDate"
+            control={control}
+            render={({ field }) => (
+              <TextFieldMUI
+                label="Data inicial:"
+                type="date"
+                error={errors?.initialDate}
+                helperText={errors?.initialDate?.message}
+                {...field}
+              />
+            )}
+          />
+        </S.WrapperField>
+        <S.WrapperField>
+          <Controller
+            name="finalDate"
+            control={control}
+            render={({ field }) => (
+              <TextFieldMUI
+                label="Data final:"
+                type="date"
+                error={errors?.finalDate}
+                helperText={errors?.finalDate?.message}
+                {...field}
+              />
+            )}
+          />
+        </S.WrapperField>
+        {/* TODO: Adicionar checkobox setor */}
+        <S.WrapperButton>
+          <ButtonMUI type="submit" loading={isSubmitting}>
+            Filtrar
+          </ButtonMUI>
+        </S.WrapperButton>
+      </form>
       <TableReports reports={reports} />
     </>
   );

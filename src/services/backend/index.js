@@ -10,7 +10,7 @@ export const authLogin = async ({ user, password }) => {
 
     return data;
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error(error.response.data.message);
   }
 };
 
@@ -23,7 +23,7 @@ export const resetPassword = async ({ newPassword, oldPassword }) => {
 
     return data;
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error(error.response.data.message);
   }
 };
 

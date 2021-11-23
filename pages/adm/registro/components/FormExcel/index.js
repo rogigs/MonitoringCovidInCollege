@@ -31,14 +31,15 @@ const FormExcel = () => {
 
       await registerUserExcel(formData);
 
-      setModal({
+      setIsSubmitting(false);
+
+      return setModal({
         open: true,
         title: "Usuário cadastrado",
         message: "Parabéns, o usuário foi cadastrado com sucesso",
         buttonName: "Concluir",
         icon: "success",
       });
-      setIsSubmitting(false);
     } catch (error) {
       setIsSubmitting(false);
       if (error.message === "Documento de planilha ausente.") {
@@ -52,7 +53,7 @@ const FormExcel = () => {
         });
       }
 
-      setModal({
+      return setModal({
         open: true,
         title: "Erro ao registrar usuário",
         message:
@@ -63,10 +64,33 @@ const FormExcel = () => {
     }
   };
 
-  const fileData = () => {
-    if (selectedFile) {
-      return (
-        <div>
+  return (
+    <>
+      <DialogMUI
+        open={modal?.open}
+        onClose={handleCloseModal}
+        buttonName={modal?.buttonName}
+        title={modal?.title}
+        icon={modal?.icon}
+      >
+        <p>{modal?.message}</p>
+      </DialogMUI>
+      <S.WrapperField>
+        <S.WrapperButton>
+          <p>Inserir arquivo Excel:</p>
+
+          <ButtonMUI variant="outlined">
+            <input
+              type="file"
+              name="file"
+              accept=".xlsx"
+              onChange={onFileChange}
+            />
+          </ButtonMUI>
+        </S.WrapperButton>
+      </S.WrapperField>
+      {selectedFile && (
+        <>
           <h2>Datalhes do arquivo:</h2>
 
           <p>
@@ -81,39 +105,8 @@ const FormExcel = () => {
             <strong>Última modificação: :</strong>{" "}
             {selectedFile.lastModifiedDate.toDateString()}
           </p>
-        </div>
-      );
-    }
-  };
-
-  return (
-    <>
-      <DialogMUI
-        open={modal?.open}
-        onClose={handleCloseModal}
-        buttonName={modal?.buttonName}
-        title={modal?.title}
-        children={modal?.message}
-        icon={modal?.icon}
-      />
-
-      <S.WrapperField>
-        <S.WrapperButton>
-          <br />
-          <br />
-          <label>Inserir arquivo Excel:</label>
-          <br />
-          <ButtonMUI variant="outlined">
-            <input
-              type="file"
-              name="file"
-              accept=".xlsx"
-              onChange={onFileChange}
-            />
-          </ButtonMUI>
-        </S.WrapperButton>
-      </S.WrapperField>
-      {fileData()}
+        </>
+      )}
 
       <S.WrapperButton>
         <ButtonMUI onClick={onFileUpload} loading={isSubmitting}>

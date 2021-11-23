@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import { useRouter } from "next/router";
 import ButtonMUI from "~/components/Button";
 import * as S from "./styles";
+import TitleHeader from "~/components/TitleHeader";
 
 function Dashboard() {
+  const [role, setRole] = useState();
+
+  useEffect(() => {
+    setRole(localStorage.getItem("permission"));
+  }, []);
+
   const router = useRouter();
 
   const onClickRegister = () => router.push("/adm/registro");
@@ -15,13 +22,17 @@ function Dashboard() {
 
   return (
     <>
-      <h1>Dashboard</h1>
+      <div style={{ marginBottom: "24px" }}>
+        <TitleHeader title="Dashboard" icon={false} />
+      </div>
       <S.Box>
         <p>Realizar registros de:</p>
-        <S.WrapperButton>
-          <ButtonMUI onClick={onClickRegister}>Usuários</ButtonMUI>
-          <ButtonMUI onClick={onClickSympton}>Sintomas</ButtonMUI>
-        </S.WrapperButton>
+        {role === "9" && (
+          <S.WrapperButton>
+            <ButtonMUI onClick={onClickRegister}>Usuários</ButtonMUI>
+            <ButtonMUI onClick={onClickSympton}>Sintomas</ButtonMUI>
+          </S.WrapperButton>
+        )}
       </S.Box>
       <S.Box>
         <p>Ver históricos de:</p>

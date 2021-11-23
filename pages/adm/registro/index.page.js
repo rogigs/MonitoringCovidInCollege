@@ -1,21 +1,16 @@
 import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { format } from "date-fns";
-import { yupResolver } from "@hookform/resolvers/yup";
+
 import { useRouter } from "next/router";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import validationSchema from "./utils/validationSchema";
-import TextFieldMUI from "~/components/TextField";
-import { registerUser } from "~/services/backend";
-import DialogMUI from "~/components/Dialog";
+
 import ButtonMUI from "~/components/Button";
 import * as S from "./styles";
-import RadioMUI from "~/components/Radio";
-import RADIOS from "./utils";
+
 import FormManual from "./components/FormManual";
 import FormExcel from "./components/FormExcel";
+import TitleHeader from "~/components/TitleHeader";
 
 function TabPanel({ children, value, index, ...other }) {
   return (
@@ -32,18 +27,8 @@ function TabPanel({ children, value, index, ...other }) {
 }
 
 function Register() {
-  const [modal, setModal] = useState({
-    open: false,
-    title: "",
-    message: "",
-    buttonName: "",
-    icon: "",
-  });
-
   const router = useRouter();
   const onClickSeeUsers = () => router.push("/adm/usuarios-cadastrados");
-
-  const handleCloseModal = () => setModal({ ...modal, open: false });
 
   const [value, setValue] = useState(0);
 
@@ -51,72 +36,10 @@ function Register() {
     setValue(newValue);
   };
 
-  const {
-    handleSubmit,
-    control,
-    formState: { isSubmitting, errors },
-    reset,
-  } = useForm({
-    mode: "onSubmit",
-    defaultValues: {
-      typeUser: "admin",
-      registrationNumber: "",
-      fullName: "",
-      bornDate: "",
-      city: "",
-      uf: "",
-    },
-    resolver: yupResolver(validationSchema),
-  });
-
-  const resetForm = () => reset();
-  const onSubmit = async (data) => {
-    try {
-      await registerUser(data);
-
-      resetForm();
-
-      setModal({
-        open: true,
-        title: "Usuário cadastrado",
-        message: "Parabéns, o usuário foi cadastrado com sucesso",
-        buttonName: "Concluir",
-        icon: "success",
-      });
-    } catch (error) {
-      if (error.message === "User already exists") {
-        return setModal({
-          open: true,
-          title: "Erro ao registrar usuário",
-          message: "Você está tentando cadastrar um usúario que já existe",
-          buttonName: "Tentar novamente",
-          icon: "warning",
-        });
-      }
-
-      setModal({
-        open: true,
-        title: "Erro ao registrar usuário",
-        message:
-          "Não foi possível cadastrar o usuário, por favor tente novamente",
-        buttonName: "Tentar novamente",
-        icon: "danger",
-      });
-    }
-  };
-
   return (
     <S.Box>
-      <DialogMUI
-        open={modal?.open}
-        onClose={handleCloseModal}
-        buttonName={modal?.buttonName}
-        title={modal?.title}
-        children={modal?.message}
-        icon={modal?.icon}
-      />
+      <TitleHeader title="Registro de usuários" />
       <div className="container">
-        <h1 className="title">Registro de usuários</h1>
         <S.WrapperTopButton>
           <ButtonMUI onClick={onClickSeeUsers}>
             Ver usuários cadastrados

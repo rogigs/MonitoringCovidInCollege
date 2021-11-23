@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { format } from "date-fns";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "next/router";
 import validationSchema from "../../utils/validationSchema";
 import TextFieldMUI from "~/components/TextField";
 import { registerUser } from "~/services/backend";
@@ -20,9 +19,6 @@ function FormManual() {
     buttonName: "",
     icon: "",
   });
-
-  const router = useRouter();
-  const onClickSeeUsers = () => router.push("/adm/usuarios-cadastrados");
 
   const handleCloseModal = () => setModal({ ...modal, open: false });
 
@@ -51,7 +47,7 @@ function FormManual() {
 
       resetForm();
 
-      setModal({
+      return setModal({
         open: true,
         title: "Usuário cadastrado",
         message: "Parabéns, o usuário foi cadastrado com sucesso",
@@ -87,9 +83,10 @@ function FormManual() {
         onClose={handleCloseModal}
         buttonName={modal?.buttonName}
         title={modal?.title}
-        children={modal?.message}
         icon={modal?.icon}
-      />
+      >
+        <p>{modal?.message}</p>
+      </DialogMUI>
       <form onSubmit={handleSubmit(onSubmit)}>
         <S.WrapperField>
           <Controller

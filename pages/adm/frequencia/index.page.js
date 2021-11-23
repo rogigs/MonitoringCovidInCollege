@@ -36,13 +36,6 @@ function Frequency() {
     defaultValues: {
       initialDate: "",
     },
-    resolver: yupResolver(
-      yup
-        .object({
-          initialDate: yup.string().required("Preencha o campo com o sintoma"),
-        })
-        .required()
-    ),
   });
 
   const resetForm = () => reset();
@@ -50,10 +43,21 @@ function Frequency() {
     try {
       const resp = await getFrequency(data);
 
-      setDataChart(resp.data);
-
       resetForm();
+
+      return setDataChart(resp.data);
     } catch (error) {
+      if (error.message === "Período inválido.") {
+        return setModal({
+          open: true,
+          title: "Erro ao buscar registros",
+          message:
+            "Não existem registros nas datas selecionadas. Tente novamente com outras datas.",
+          buttonName: "Tentar novamente",
+          icon: "warning",
+        });
+      }
+
       return setModal({
         open: true,
         title: "Erro ao filtrar dados",
@@ -120,9 +124,10 @@ function Frequency() {
           onClose={handleCloseModal}
           buttonName={modal?.buttonName}
           title={modal?.title}
-          children={modal?.message}
           icon={modal?.icon}
-        />
+        >
+          <p>{modal?.message}</p>
+        </DialogMUI>
         <form className="container" onSubmit={handleSubmit(onSubmit)}>
           <h1 className="title">Ver frequência de usuários</h1>
           <S.WrapperField>

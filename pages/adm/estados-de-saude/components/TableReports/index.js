@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import * as S from "./styles";
 
 const TableReports = ({ reports }) => (
@@ -26,6 +27,8 @@ const TableReports = ({ reports }) => (
   </div>
 );
 
-TableReports.propTypes = {};
+TableReports.propTypes = {
+  reports: PropTypes.array.isRequired,
+};
 
 export default TableReports;

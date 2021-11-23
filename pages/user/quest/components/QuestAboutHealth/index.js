@@ -25,11 +25,11 @@ function QuestAboutHealth() {
     mode: "onSubmit",
   });
   const router = useRouter();
-  const [symptoms, setSymptoms] = useState([]);
+  const [symptomsState, setSymptomsState] = useState([]);
 
   useEffect(async () => {
     const { symptoms } = await getSymptoms();
-    symptoms && setSymptoms(symptoms);
+    return symptoms && setSymptomsState(symptoms);
   }, []);
 
   const onSubmit = async (data) => {
@@ -41,9 +41,9 @@ function QuestAboutHealth() {
 
       await registerHealth(filtered);
 
-      router.push("/user/painel-de-registro");
+      return router.push("/user/painel-de-registro");
     } catch (error) {
-      if (error.message === "Sintoma já existente.") {
+      if (error.message === "Registro já feito hoje.") {
         return setModal({
           open: true,
           title: "Erro ao registrar sintomas",
@@ -57,7 +57,7 @@ function QuestAboutHealth() {
         open: true,
         title: "Erro ao registrar sintomas",
         message:
-          "Não foi possível cadastrar o sintoma, por favor tente novamente",
+          "Não foi possível cadastrar o sintoma, por favor tente novamente.",
         buttonName: "Tentar novamente",
         icon: "danger",
       });
@@ -94,13 +94,14 @@ function QuestAboutHealth() {
         onClose={handleCloseModal}
         buttonName={modal?.buttonName}
         title={modal?.title}
-        children={modal?.message}
         icon={modal?.icon}
-      />
+      >
+        <p>{modal?.message}</p>
+      </DialogMUI>
       <form onSubmit={handleSubmit(onSubmit)}>
         <h1 className="title">Marque os sintomas que você está sentido:</h1>
         <S.BoxRadios>
-          {symptoms.map((symptom) => (
+          {symptomsState.map((symptom) => (
             <RowOfFormWithRadios text={symptom.name} name={symptom.name} />
           ))}
         </S.BoxRadios>

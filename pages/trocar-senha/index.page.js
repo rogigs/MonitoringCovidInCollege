@@ -39,7 +39,7 @@ const Login = () => {
     try {
       await resetPassword(data);
 
-      router.push("/adm/dashboard");
+      router.push("/login");
     } catch (error) {
       setModal({
         open: true,
@@ -57,6 +57,7 @@ const Login = () => {
         <iframe
           src="https://embed.lottiefiles.com/animation/17169"
           frameBorder="0"
+          title="Logo"
         />
       </div>
       <div>
@@ -65,9 +66,10 @@ const Login = () => {
           onClose={handleCloseModal}
           buttonName={modal?.buttonName}
           title={modal?.title}
-          children={modal?.message}
           icon="danger"
-        />
+        >
+          <p>{modal?.message}</p>
+        </DialogMUI>
         <S.Box>
           <form className="container" onSubmit={handleSubmit(onSubmit)}>
             <h1 className="title">COVID Monitoring</h1>

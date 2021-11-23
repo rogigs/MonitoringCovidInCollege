@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Symptoms from "pages/adm/sintomas/index.page";
 import * as S from "./styles";
 import { healthHistoryUser } from "~/services/backend";
 
@@ -9,8 +8,9 @@ function PanelRegister() {
   useEffect(async () => {
     const { data } = await healthHistoryUser();
 
-    data && setHistory(data);
+    return data && setHistory(data);
   }, []);
+
   return (
     <section>
       <>

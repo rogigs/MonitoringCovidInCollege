@@ -8,16 +8,9 @@ export const Box = styled.div`
     margin-bottom: ${DESIGN_SYSTEM.spaces.spaceSm};
   }
 
-  ${media.greaterThan("tablet")`
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    
-  
-      .container {
-        width: 50%;
-      }
-  `}
+  form {
+    padding-top: ${DESIGN_SYSTEM.spaces.space};
+  }
 `;
 
 export const WrapperField = styled.div`
@@ -25,7 +18,7 @@ export const WrapperField = styled.div`
 `;
 
 export const WrapperTopButton = styled.div`
-  margin-bottom: ${DESIGN_SYSTEM.spaces.spaceSm} ${DESIGN_SYSTEM.spaces.spaceSm};
+  margin: ${DESIGN_SYSTEM.spaces.spaceSm} 0 ${DESIGN_SYSTEM.spaces.spaceSm} 0;
   display: flex;
   justify-content: end;
 
@@ -46,4 +39,24 @@ export const WrapperButton = styled.div`
       margin: 0 auto;
       width: 50%;
   `}
+`;
+
+export const WrapperButtonExcel = styled.div`
+  margin: ${DESIGN_SYSTEM.spaces.space} 0 ${DESIGN_SYSTEM.spaces.spaceSm} 0;
+  background-color: #fff;
+
+  border: 1px solid #000;
+  border-style: dotted;
+
+  font-weight: 300;
+  min-height: 200px;
+
+  p {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: burlywood;
+    height: 100%;
+  }
 `;

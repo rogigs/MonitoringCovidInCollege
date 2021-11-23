@@ -4,20 +4,22 @@ import { useRouter } from "next/router";
 
 import "./index.css";
 import Layout from "~/components/layout";
-// This default export is required in a new `pages/_app.js` file.
-// eslint-disable-next-line react/prop-types
+
 const App = ({ Component, pageProps }) => {
   const isBrowser = typeof window !== "undefined";
   const router = useRouter();
 
-  const user =
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const getWindow = typeof window !== "undefined" ?? null;
+  const getToken = getWindow && localStorage.getItem("token");
+  const getkeepMeConnected =
+    getWindow && localStorage.getItem("keepMeConnected");
+  const user = getToken || getkeepMeConnected;
 
   useEffect(() => {
     if (!user) {
       return router.push("/login");
     }
-  }, [user]);
+  }, []);
 
   if (router.pathname === "/login" || router.pathname === "/trocar-senha") {
     return isBrowser ? <Component {...pageProps} /> : null;

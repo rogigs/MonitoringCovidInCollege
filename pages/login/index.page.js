@@ -16,6 +16,7 @@ const Login = () => {
     title: "",
     message: "",
     buttonName: "",
+    icon: "",
   });
 
   const {
@@ -38,30 +39,39 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
-      const { token } = await authLogin(data);
+      const { token, permission } = await authLogin(data);
 
       const { user, password } = data;
 
       localStorage.setItem("token", token);
+      localStorage.setItem("permission", permission);
+      localStorage.setItem("keepMeConnected", data.keepMeConnected);
 
-      user === password
-        ? router.push("/trocar-senha")
+      if (user === password) {
+        return router.push("/trocar-senha");
+      }
+
+      return permission === 0
+        ? router.push("/user/quest")
         : router.push("/adm/dashboard");
     } catch (error) {
-      if (error.message === "Error: Request failed with status code 401") {
+      if (error.message === "Invalid credentials") {
         setModal({
           open: true,
           title: "Erro ao logar",
-          message: "Número de matrícula/funcional ou senha incorretos",
+          message: "Número de matrícula/funcional ou senha incorretos.",
           buttonName: "Tentar novamente",
+          icon: "warning",
         });
       }
 
       setModal({
         open: true,
         title: "Erro ao logar",
-        message: "Número de matrícula/funcional ou senha incorretos",
+        message:
+          "Nâo foi possível realizar o login, por favor tente novamente.",
         buttonName: "Tentar novamente",
+        icon: "danger",
       });
     }
   };
@@ -72,6 +82,7 @@ const Login = () => {
         <iframe
           src="https://embed.lottiefiles.com/animation/17169"
           frameBorder="0"
+          title="Logo"
         />
       </div>
       <div>
@@ -80,9 +91,10 @@ const Login = () => {
           onClose={handleCloseModal}
           buttonName={modal?.buttonName}
           title={modal?.title}
-          children={modal?.message}
-          icon="danger"
-        />
+          icon={modal?.icon}
+        >
+          <p>{modal?.message}</p>
+        </DialogMUI>
         <S.Box>
           <form className="container" onSubmit={handleSubmit(onSubmit)}>
             <h1 className="title">COVID Monitoring</h1>

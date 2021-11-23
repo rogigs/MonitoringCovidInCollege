@@ -33,9 +33,9 @@ function QuestItsOk({ setQuestItsOk }) {
     try {
       await registerHealth([]);
 
-      router.push("/user/painel-de-registro");
+      return router.push("/user/painel-de-registro");
     } catch (error) {
-      if (error.message === "Sintoma já existente.") {
+      if (error.message === "Registro já feito hoje.") {
         return setModal({
           open: true,
           title: "Erro ao registrar sintomas",
@@ -49,7 +49,7 @@ function QuestItsOk({ setQuestItsOk }) {
         open: true,
         title: "Erro ao registrar sintomas",
         message:
-          "Não foi possível cadastrar o sintoma, por favor tente novamente",
+          "Não foi possível cadastrar o sintoma, por favor tente novamente.",
         buttonName: "Tentar novamente",
         icon: "danger",
       });
@@ -61,20 +61,21 @@ function QuestItsOk({ setQuestItsOk }) {
 
     setQuestItsOk(formattedData);
 
-    formattedData && submitData();
+    return formattedData && submitData();
   };
 
   return (
     <S.Box>
+      <DialogMUI
+        open={modal?.open}
+        onClose={handleCloseModal}
+        buttonName={modal?.buttonName}
+        title={modal?.title}
+        icon={modal?.icon}
+      >
+        <p>{modal?.message}</p>
+      </DialogMUI>
       <form className="container" onSubmit={handleSubmit(onSubmit)}>
-        <DialogMUI
-          open={modal?.open}
-          onClose={handleCloseModal}
-          buttonName={modal?.buttonName}
-          title={modal?.title}
-          children={modal?.message}
-          icon={modal?.icon}
-        />
         <h1 className="title">Como você está se sentindo hoje?</h1>
         <S.BoxRadios>
           <S.WrapperField>

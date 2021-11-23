@@ -10,7 +10,7 @@ export const authLogin = async ({ user, password }) => {
 
     return data;
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error(error.response.data.message);
   }
 };
 
@@ -23,7 +23,7 @@ export const resetPassword = async ({ newPassword, oldPassword }) => {
 
     return data;
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error(error.response.data.message);
   }
 };
 
@@ -53,6 +53,19 @@ export const registerUser = async ({
       sector,
       permission: permission[typeUser],
     });
+
+    return data;
+  } catch (error) {
+    throw new Error(error.response.data.message);
+  }
+};
+
+export const registerUserExcel = async (formData) => {
+  try {
+    const { data } = await HttpConfig.withToken.post(
+      "/user/batch_register",
+      formData
+    );
 
     return data;
   } catch (error) {

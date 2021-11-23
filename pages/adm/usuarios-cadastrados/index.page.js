@@ -5,29 +5,28 @@ import ButtonMUI from "~/components/Button";
 import TableUser from "~/components/Table/TableUser";
 import * as S from "./styles";
 import { getUsers } from "~/services/backend";
+import TitleHeader from "~/components/TitleHeader";
 
 function UsersRegistered() {
   const router = useRouter();
   const onClickRegister = () => router.push("/adm/registro");
 
-  const [users, setUsers] = useState([]);
+  const [usersState, setUsersState] = useState([]);
 
   useEffect(async () => {
     const { users } = await getUsers();
-    users && setUsers(users);
-  }, [users]);
+    return users && setUsersState(users);
+  }, []);
 
   return (
     <>
-      <h1>Usuários registrados</h1>
+      <TitleHeader title="Usuários registrados" />
       <br />
       <S.WrapperButton>
         <ButtonMUI onClick={onClickRegister}>Registrar novo usuário</ButtonMUI>
       </S.WrapperButton>
 
-      <br />
-      <br />
-      <TableUser data={users} />
+      <TableUser data={usersState} />
     </>
   );
 }

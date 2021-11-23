@@ -62,9 +62,10 @@ export const registerUser = async ({
 
 export const registerUserExcel = async (formData) => {
   try {
-    const { data } = await HttpConfig.withToken.post("/user/batch_register", {
-      sheet: formData,
-    });
+    const { data } = await HttpConfig.withToken.post(
+      "/user/batch_register",
+      formData
+    );
 
     return data;
   } catch (error) {

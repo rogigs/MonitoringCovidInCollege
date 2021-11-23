@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import * as yup from "yup";
 import { registerUserExcel } from "~/services/backend";
 import DialogMUI from "~/components/Dialog";
 import ButtonMUI from "~/components/Button";
 import * as S from "../../styles";
 
-function FormExcel() {
+const FormExcel = () => {
   const [modal, setModal] = useState({
     open: false,
     title: "",
@@ -17,28 +15,21 @@ function FormExcel() {
 
   const handleCloseModal = () => setModal({ ...modal, open: false });
 
-  const {
-    handleSubmit,
-    control,
-    formState: { isSubmitting, errors },
-    reset,
-  } = useForm({
-    mode: "onSubmit",
-    defaultValues: {
-      excel: "",
-    },
-  });
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const resetForm = () => reset();
-  const onSubmit = async (data) => {
+  const onFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const onFileUpload = async () => {
     try {
-      if (data.excel === "") {
-        throw new Error();
-      }
+      setIsSubmitting(true);
+      const formData = new FormData();
 
-      await registerUserExcel(data);
+      formData.append("sheet", selectedFile, selectedFile.name);
 
-      resetForm();
+      await registerUserExcel(formData);
 
       setModal({
         open: true,
@@ -47,12 +38,15 @@ function FormExcel() {
         buttonName: "Concluir",
         icon: "success",
       });
+      setIsSubmitting(false);
     } catch (error) {
-      if (error.message === "User already exists") {
+      setIsSubmitting(false);
+      if (error.message === "Documento de planilha ausente.") {
         return setModal({
           open: true,
           title: "Erro ao registrar usuário",
-          message: "Você está tentando cadastrar um usúario que já existe",
+          message:
+            "Nenhuma planilha foi inserida. Insira uma planilha e tente novamente.",
           buttonName: "Tentar novamente",
           icon: "warning",
         });
@@ -62,10 +56,33 @@ function FormExcel() {
         open: true,
         title: "Erro ao registrar usuário",
         message:
-          "Não foi possível cadastrar o usuário, por favor verifique se o arquivo está sendo enviado da forma correta e tente novamente",
+          "Não foi possível cadastrar o usuário, por favor verifique se o arquivo está sendo enviado da forma correta e tente novamente.",
         buttonName: "Tentar novamente",
         icon: "danger",
       });
+    }
+  };
+
+  const fileData = () => {
+    if (selectedFile) {
+      return (
+        <div>
+          <h2>Datalhes do arquivo:</h2>
+
+          <p>
+            <strong>Nome do arquivo:</strong> {selectedFile.name}
+          </p>
+
+          <p>
+            <strong> Tipo do arquivo::</strong> {selectedFile.type}
+          </p>
+
+          <p>
+            <strong>Última modificação: :</strong>{" "}
+            {selectedFile.lastModifiedDate.toDateString()}
+          </p>
+        </div>
+      );
     }
   };
 
@@ -79,31 +96,33 @@ function FormExcel() {
         children={modal?.message}
         icon={modal?.icon}
       />
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <S.WrapperField>
-          <Controller
-            name="excel"
-            control={control}
-            render={({ field }) => (
-              <S.WrapperButton>
-                <label>Inserir arquivo Excel:</label>
-                <ButtonMUI variant="outlined" {...field}>
-                  <input type="file" name="file" accept=".xlsx" />
-                </ButtonMUI>
-                <label style={{ color: "red" }}>{errors?.excel?.message}</label>
-              </S.WrapperButton>
-            )}
-          />
-        </S.WrapperField>
 
+      <S.WrapperField>
         <S.WrapperButton>
-          <ButtonMUI type="submit" loading={isSubmitting}>
-            Cadastrar
+          <br />
+          <br />
+          <label>Inserir arquivo Excel:</label>
+          <br />
+          <ButtonMUI variant="outlined">
+            <input
+              type="file"
+              name="file"
+              accept=".xlsx"
+              onChange={onFileChange}
+            />
           </ButtonMUI>
         </S.WrapperButton>
-      </form>
+      </S.WrapperField>
+      {fileData()}
+
+      <S.WrapperButton>
+        <ButtonMUI onClick={onFileUpload} loading={isSubmitting}>
+          {" "}
+          Cadastrar
+        </ButtonMUI>
+      </S.WrapperButton>
     </>
   );
-}
+};
 
 export default FormExcel;

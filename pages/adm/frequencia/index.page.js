@@ -9,6 +9,7 @@ import ButtonMUI from "~/components/Button";
 import * as S from "./styles";
 import validationSchema from "./utils/validationSchema";
 import TitleHeader from "~/components/TitleHeader";
+import StringHelper from "~/helpers/StringHelper";
 
 const ApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -49,7 +50,9 @@ function Frequency() {
       resetForm();
 
       const series = Object.values(frequency);
-      const xAxis = Object.keys(frequency);
+      const xAxis = Object.keys(frequency).keys((key) =>
+        StringHelper.formatTimestampToDateReadble(key)
+      );
 
       return setDataChart({ series, xAxis });
     } catch (error) {

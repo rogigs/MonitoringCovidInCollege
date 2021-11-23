@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 import TextFieldMUI from "~/components/TextField";
 import { getReports } from "~/services/backend";
 import DialogMUI from "~/components/Dialog";
@@ -8,6 +9,7 @@ import ButtonMUI from "~/components/Button";
 import * as S from "./styles";
 import TableReports from "./components/TableReports";
 import TitleHeader from "~/components/TitleHeader";
+import validationSchema from "./utils/validationSchema";
 
 function Symptoms() {
   const [reports, setReports] = useState([]);
@@ -30,8 +32,10 @@ function Symptoms() {
   } = useForm({
     mode: "onSubmit",
     defaultValues: {
-      symptom: "",
+      initialDate: "",
+      finalDate: "",
     },
+    resolver: yupResolver(validationSchema),
   });
 
   const resetForm = () => reset();

@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import dynamic from "next/dynamic";
 import TextFieldMUI from "~/components/TextField";
 import { getFrequency } from "~/services/backend";
 import DialogMUI from "~/components/Dialog";
 import ButtonMUI from "~/components/Button";
 import * as S from "./styles";
+import validationSchema from "./utils/validationSchema";
 
 const ApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -35,7 +35,9 @@ function Frequency() {
     mode: "onSubmit",
     defaultValues: {
       initialDate: "",
+      finalDate: "",
     },
+    resolver: yupResolver(validationSchema),
   });
 
   const resetForm = () => reset();

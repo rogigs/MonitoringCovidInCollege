@@ -24,9 +24,8 @@ const Login = () => {
   } = useForm({
     mode: "onSubmit",
     defaultValues: {
-      user: "",
-      password: "",
-      keepMeConnected: false,
+      oldPassword: "",
+      newPassword: "",
     },
     resolver: yupResolver(validationSchema),
   });

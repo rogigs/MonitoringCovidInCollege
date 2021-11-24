@@ -8,6 +8,11 @@ const StringHelper = {
       `${arr[8]}${arr[9]}`
     );
   },
+  formatTimestampToDateReadble: (timestamp) => {
+    const date = new Date(parseFloat(timestamp));
+
+    return `${date.getMonth() + 1}/${date.getDate()}/${date.getUTCFullYear()}`;
+  },
 };
 
 export default StringHelper;

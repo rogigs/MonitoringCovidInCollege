@@ -1,16 +1,39 @@
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+import dynamic from "next/dynamic";
 import TextFieldMUI from "~/components/TextField";
 import { getReports } from "~/services/backend";
 import DialogMUI from "~/components/Dialog";
 import ButtonMUI from "~/components/Button";
 import * as S from "./styles";
-import TableReports from "./components/TableReports";
-import TitleHeader from "~/components/TitleHeader";
 
-function Symptoms() {
-  const [reports, setReports] = useState([]);
+import TitleHeader from "~/components/TitleHeader";
+import validationSchema from "./utils/validationSchema";
+import RadioMUI from "~/components/Radio";
+import StringHelper from "~/helpers/StringHelper";
+
+const ApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
+
+const RADIOS = [
+  {
+    value: "ok",
+    label: "Sim",
+  },
+  {
+    value: "-",
+    label: "Não",
+  },
+];
+
+function StateHealth() {
+  const [dataChart, setDataChart] = useState({
+    xAxis: [],
+    series: [],
+  });
 
   const [modal, setModal] = useState({
     open: false,
@@ -26,25 +49,73 @@ function Symptoms() {
     handleSubmit,
     control,
     formState: { isSubmitting, errors },
-    reset,
   } = useForm({
     mode: "onSubmit",
     defaultValues: {
-      symptom: "",
+      initialDate: "",
+      finalDate: "",
+      bySector: "-",
     },
+    resolver: yupResolver(validationSchema),
   });
-
-  const resetForm = () => reset();
 
   const onSubmit = async (data) => {
     try {
-      const res = await getReports(data);
+      const reports = await getReports(data);
 
-      resetForm();
+      if (Object.keys(reports).length === 0) {
+        throw new Error({ message: "Período inválido." });
+      }
 
-      return setReports(res.data);
+      const xAxis = Object.keys(reports).map((key) =>
+        StringHelper.formatTimestampToDateReadble(key)
+      );
+      const seriesHealth = Object.values(reports);
+      const seriesUnhealthy = Object.values(reports);
+
+      if (data.bySector === "-") {
+        return setDataChart({
+          xAxis,
+          series: [
+            {
+              name: "Com saúde:",
+              data: seriesHealth.map((values) => values.healthy),
+            },
+            {
+              name: "Sem saúde:",
+              data: seriesUnhealthy.map((values) => values.unhealthy),
+            },
+          ],
+        });
+      }
+
+      const dataSeriesHealth = seriesHealth.map((elem) => {
+        const name = Object.keys(elem);
+        return elem[name].healthy;
+      });
+      const dataSeriesunhealthy = seriesHealth.map((elem) => {
+        const name = Object.keys(elem);
+        return elem[name].unhealthy;
+      });
+
+      const sectorSeriesHealth = Object.keys(seriesHealth[0]);
+
+      const health = {
+        name: `Com saúde(${sectorSeriesHealth}): `,
+        data: dataSeriesHealth,
+      };
+
+      const unhealthy = {
+        name: `Sem saúde(${sectorSeriesHealth}): `,
+        data: dataSeriesunhealthy,
+      };
+
+      return setDataChart({
+        series: [health, unhealthy],
+        xAxis,
+      });
     } catch (error) {
-      if (error.message === "Sem registros.") {
+      if (error.message === "Período inválido.") {
         return setModal({
           open: true,
           title: "Erro ao buscar registros",
@@ -64,6 +135,41 @@ function Symptoms() {
         icon: "danger",
       });
     }
+  };
+
+  const options = {
+    chart: {
+      type: "bar",
+      height: 430,
+    },
+    plotOptions: {
+      bar: {
+        horizontal: true,
+        dataLabels: {
+          position: "top",
+        },
+      },
+    },
+    dataLabels: {
+      enabled: true,
+      offsetX: -6,
+      style: {
+        fontSize: "12px",
+        colors: ["#fff"],
+      },
+    },
+    stroke: {
+      show: true,
+      width: 1,
+      colors: ["#fff"],
+    },
+    tooltip: {
+      shared: true,
+      intersect: false,
+    },
+    xaxis: {
+      categories: dataChart.xAxis ?? [],
+    },
   };
 
   return (
@@ -109,16 +215,32 @@ function Symptoms() {
             )}
           />
         </S.WrapperField>
-        {/* TODO: Adicionar checkobox setor */}
+        <S.WrapperRadios>
+          <p className="label">Filtrar por setor: </p>
+          <Controller
+            name="bySector"
+            control={control}
+            render={({ field }) => (
+              <RadioMUI row radios={RADIOS} field={field} />
+            )}
+          />
+        </S.WrapperRadios>
         <S.WrapperButton>
           <ButtonMUI type="submit" loading={isSubmitting}>
             Filtrar
           </ButtonMUI>
         </S.WrapperButton>
       </form>
-      <TableReports reports={reports} />
+      <S.WrapperChart>
+        <ApexChart
+          options={options}
+          series={dataChart.series}
+          type="bar"
+          height="400"
+        />
+      </S.WrapperChart>
     </>
   );
 }
 
-export default Symptoms;
+export default StateHealth;

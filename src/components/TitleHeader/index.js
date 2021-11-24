@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 const Header = styled.header`
   width: 100%;
   display: flex;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
 
   > * {
     &:first-child {

@@ -106,11 +106,11 @@ export const getSymptoms = async () => {
   }
 };
 
-export const getReports = async ({ initialDate, finalDate }) => {
+export const getReports = async ({ initialDate, finalDate, bySector }) => {
   try {
     const { data } = await HttpConfig.withToken.get("health/report", {
       params: {
-        by_sector: "True",
+        by_sector: "False",
         initial_date:
           StringHelper.formatStringToTimestamp(initialDate).getTime(),
         final_date: StringHelper.formatStringToTimestamp(finalDate).getTime(),

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as S from "./styles";
 import { healthHistoryUser } from "~/services/backend";
+import StringHelper from "~/helpers/StringHelper";
 
 function PanelRegister() {
   const [history, setHistory] = useState({});
@@ -28,7 +29,7 @@ function PanelRegister() {
         if (history[key].length === 0) {
           return (
             <S.Card>
-              <p> {key} </p>
+              <p> {StringHelper.formatTimestampToDateReadble(key)} </p>
               <p>Você estava bem neste dia !!!</p>
             </S.Card>
           );
@@ -36,7 +37,7 @@ function PanelRegister() {
 
         return (
           <S.Card>
-            <p> {key} </p>
+            <p> {StringHelper.formatTimestampToDateReadble(key)} </p>
             <p>
               Você estava com{" "}
               <strong>

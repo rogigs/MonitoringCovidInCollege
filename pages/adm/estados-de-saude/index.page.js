@@ -31,9 +31,8 @@ const RADIOS = [
 
 function StateHealth() {
   const [dataChart, setDataChart] = useState({
-    seriesHealth: [],
     xAxis: [],
-    seriesUnhealthy: [],
+    series: [],
   });
 
   const [modal, setModal] = useState({
@@ -64,18 +63,57 @@ function StateHealth() {
     try {
       const reports = await getReports(data);
 
+      if (Object.keys(reports).length === 0) {
+        throw new Error({ message: "Período inválido." });
+      }
+
       const xAxis = Object.keys(reports).map((key) =>
         StringHelper.formatTimestampToDateReadble(key)
       );
+      const seriesHealth = Object.values(reports);
+      const seriesUnhealthy = Object.values(reports);
 
-      const seriesHealth = Object.values(reports).map(
-        (values) => values.healthy
-      );
-      const seriesUnhealthy = Object.values(reports).map(
-        (values) => values.unhealthy
-      );
+      if (data.bySector === "-") {
+        return setDataChart({
+          xAxis,
+          series: [
+            {
+              name: "Com saúde:",
+              data: seriesHealth.map((values) => values.healthy),
+            },
+            {
+              name: "Sem saúde:",
+              data: seriesUnhealthy.map((values) => values.unhealthy),
+            },
+          ],
+        });
+      }
 
-      return setDataChart({ seriesHealth, xAxis, seriesUnhealthy });
+      const dataSeriesHealth = seriesHealth.map((elem) => {
+        const name = Object.keys(elem);
+        return elem[name].healthy;
+      });
+      const dataSeriesunhealthy = seriesHealth.map((elem) => {
+        const name = Object.keys(elem);
+        return elem[name].unhealthy;
+      });
+
+      const sectorSeriesHealth = Object.keys(seriesHealth[0]);
+
+      const health = {
+        name: `Com saúde(${sectorSeriesHealth}): `,
+        data: dataSeriesHealth,
+      };
+
+      const unhealthy = {
+        name: `Sem saúde(${sectorSeriesHealth}): `,
+        data: dataSeriesunhealthy,
+      };
+
+      return setDataChart({
+        series: [health, unhealthy],
+        xAxis,
+      });
     } catch (error) {
       if (error.message === "Período inválido.") {
         return setModal({
@@ -100,14 +138,6 @@ function StateHealth() {
   };
 
   const options = {
-    series: [
-      {
-        data: [44, 55, 41, 64, 22, 43, 21],
-      },
-      {
-        data: [53, 32, 33, 52, 13, 44, 32],
-      },
-    ],
     chart: {
       type: "bar",
       height: 430,
@@ -141,17 +171,6 @@ function StateHealth() {
       categories: dataChart.xAxis ?? [],
     },
   };
-
-  const series = [
-    {
-      name: "Com saúde:",
-      data: dataChart.seriesHealth ?? [],
-    },
-    {
-      name: "Sem saúde:",
-      data: dataChart.seriesUnhealthy ?? [],
-    },
-  ];
 
   return (
     <>
@@ -213,7 +232,12 @@ function StateHealth() {
         </S.WrapperButton>
       </form>
       <S.WrapperChart>
-        <ApexChart options={options} series={series} type="bar" height="400" />
+        <ApexChart
+          options={options}
+          series={dataChart.series}
+          type="bar"
+          height="400"
+        />
       </S.WrapperChart>
     </>
   );

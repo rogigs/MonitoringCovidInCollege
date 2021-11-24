@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import media from "~/css/styledMedias";
 
 const BoxCentral = styled.div`
   max-width: 1440px;
@@ -15,11 +14,8 @@ const BoxCentral = styled.div`
 
 const BoxMain = styled.main`
   max-width: 1440px;
+  padding: 0 16px 0 16px;
   margin: 0 auto;
-
-  ${media.lessThan("tablet")`
-      margin: 0 16px 0 16px;
-  `}
 `;
 
 const WrapperLayout = ({ children }) => (
